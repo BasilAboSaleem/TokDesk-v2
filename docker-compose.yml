@@ -9,21 +9,9 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - mongo
       - redis
     volumes:
       - .:/usr/src/app
-    networks:
-      - tokdesk_network
-
-  mongo:
-    image: mongo:6.0
-    container_name: tokdesk_mongo
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
     networks:
       - tokdesk_network
 
@@ -48,9 +36,6 @@ services:
       - app
     networks:
       - tokdesk_network
-
-volumes:
-  mongo_data:
 
 networks:
   tokdesk_network:

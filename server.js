@@ -3,6 +3,7 @@
 // ===========================
 
 // --------- Imports ----------
+require('dotenv').config();
 const http = require("http");
 const { Server } = require("socket.io");
 const { app } = require("./app");
@@ -50,7 +51,7 @@ io.on("connection", (socket) => {
 });
 
 // --------- Start Server ----------
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
