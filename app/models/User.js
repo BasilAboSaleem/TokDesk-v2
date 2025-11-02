@@ -29,14 +29,10 @@ const userSchema = new mongoose.Schema({
   },
 
   company: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Company',
-    required: function() {
-      // Super Admin or system roles might not belong to a company
-      return ![ROLES.SUPER_ADMIN, ROLES.SYSTEM_ADMIN].includes(this.role);
-    },
-    default: null
-  },
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Company',
+  required: true
+},
 
   department: {
     type: mongoose.Schema.Types.ObjectId,
