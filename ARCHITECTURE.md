@@ -1,4 +1,4 @@
-# TokDesk v2 - Enterprise Architecture Document
+# TokDesk v2 - Enterprise Architecture Document (Updated)
 
 ---
 
@@ -36,15 +36,17 @@ TokDesk-v2/
 ```
 
 **Notes:**
-- Each feature/module should have its own controllers/services/repositories structure inside `app/`.
-- Validators ensure request data is correct before reaching Controllers.
-- Sockets folder handles all real-time communication logic.
-- Workers & Queues handle background tasks (notifications, emails, auditing, etc.).
-- Config folder centralizes all external service connections.
+
+* Each feature/module should have its own controllers/services/repositories structure inside `app/`.
+* Validators ensure request data is correct before reaching Controllers.
+* Sockets folder handles all real-time communication logic.
+* Workers & Queues handle background tasks (notifications, emails, auditing, etc.).
+* Config folder centralizes all external service connections.
 
 ---
 
 # 1. System Context
+
 TokDesk v2 is a full-stack modular communication and ticketing system. The system interacts with multiple external services and components:
 
 ```mermaid
@@ -62,13 +64,15 @@ flowchart TD
 ```
 
 **External Integrations:**
-- SMTP / Email Service for notifications
-- Cloudinary / S3 for file storage
-- Webhooks for third-party integrations
+
+* SMTP / Email Service for notifications
+* Cloudinary / S3 for file storage
+* Webhooks for third-party integrations
 
 ---
 
 # 2. Component Diagram (Internal Architecture)
+
 ```mermaid
 flowchart TD
     Controller[Controllers] --> Service[Services]
@@ -89,9 +93,14 @@ flowchart TD
     Controller --> Modules
 ```
 
+**Note:**
+
+* AuditModule handles logging of all user actions via **AuditLog** model and background workers.
+
 ---
 
 # 3. Request Lifecycle Flow
+
 ```mermaid
 sequenceDiagram
     participant Frontend
@@ -115,6 +124,7 @@ sequenceDiagram
 ---
 
 # 4. Async Flow / Background Jobs
+
 ```mermaid
 flowchart TD
     Service -->|Queue Job| RedisQueue[(BullMQ Queue)]
@@ -126,14 +136,16 @@ flowchart TD
 ```
 
 **Usage:**
-- Sending emails
-- Push notifications
-- Archiving old conversations
-- Audit log processing
+
+* Sending emails
+* Push notifications
+* Archiving old conversations
+* Audit log processing
 
 ---
 
 # 5. Database Schema Overview (ERD)
+
 ```mermaid
 erDiagram
     User ||--o{ Company : belongs_to
@@ -143,28 +155,37 @@ erDiagram
     Conversation ||--o{ Participant : includes
     User ||--o{ Message : sends
     Invitation ||--o{ User : invites
+    AuditLog ||--o{ User : logs_for
+    AuditLog ||--o{ Company : belongs_to
 ```
 
 **Notes:**
-- Soft delete is applied to Users, Departments, Conversations, and Messages.
-- Indexing applied on frequently queried fields (email, conversationId, departmentId).
+
+* Soft delete is applied to Users, Departments, Conversations, and Messages.
+* Indexing applied on frequently queried fields (email, conversationId, departmentId).
+* **AuditLog** tracks all user actions across entities; stores optional IP address and details for flexible auditing.
 
 ---
 
 # 6. Caching Strategy
-- **Redis Cache:**
-  - Frequently accessed conversations
-  - System announcements
-  - User sessions & presence
-- **Invalidation Rules:**
-  - Update cache on data modification
-  - Expire sessions periodically
-- **Pub/Sub:**
-  - Real-time notifications to multiple server instances
+
+* **Redis Cache:**
+
+  * Frequently accessed conversations
+  * System announcements
+  * User sessions & presence
+* **Invalidation Rules:**
+
+  * Update cache on data modification
+  * Expire sessions periodically
+* **Pub/Sub:**
+
+  * Real-time notifications to multiple server instances
 
 ---
 
 # 7. Security & Auth Flow
+
 ```mermaid
 sequenceDiagram
     participant User
@@ -178,20 +199,21 @@ sequenceDiagram
     API->>AuthService: Validate Credentials
     AuthService->>MongoDB: Fetch User
     AuthService-->>API: JWT Token + Refresh Token
-    API-->>Frontend: Return Tokens
     Frontend->>API: Authenticated Requests with JWT
     API->>Redis: Validate Session / Role
 ```
 
 **Features:**
-- JWT Authentication with Refresh Tokens
-- Role-Based Access Control (SuperAdmin, CompanyAdmin, Manager, Agent, User)
-- Password hashing & rate limiting
-- Secure endpoints with middleware validation
+
+* JWT Authentication with Refresh Tokens
+* Role-Based Access Control (SuperAdmin, CompanyAdmin, Manager, Agent, User)
+* Password hashing & rate limiting
+* Secure endpoints with middleware validation
 
 ---
 
 # 8. DevOps & Deployment
+
 ```mermaid
 flowchart TD
     Nginx -->|Reverse Proxy| NodeContainers[Node.js App Containers]
@@ -202,31 +224,33 @@ flowchart TD
 ```
 
 **Notes:**
-- Docker Compose includes MongoDB, Redis, Nginx, App containers
-- Separate `.env` for Dev, Staging, Production
-- Nginx handles SSL termination and load balancing
+
+* Docker Compose includes MongoDB, Redis, Nginx, App containers
+* Separate `.env` for Dev, Staging, Production
+* Nginx handles SSL termination and load balancing
 
 ---
 
 # 9. Performance Targets
-| Metric | Goal | Tool |
-|--------|------|------|
-| Average Response Time | < 200ms | k6 / ApacheBench |
-| Concurrent Connections | 10k+ | Socket.io Cluster |
-| Cache Hit Ratio | > 85% | Redis Monitor |
-| Job Processing Time | < 500ms per job | BullMQ / Custom Worker Logs |
+
+| Metric                 | Goal            | Tool                        |
+| ---------------------- | --------------- | --------------------------- |
+| Average Response Time  | < 200ms         | k6 / ApacheBench            |
+| Concurrent Connections | 10k+            | Socket.io Cluster           |
+| Cache Hit Ratio        | > 85%           | Redis Monitor               |
+| Job Processing Time    | < 500ms per job | BullMQ / Custom Worker Logs |
 
 ---
 
 # 10. Future Enhancements
-- Microservices transition (optional)
-- GraphQL API Gateway
-- Multi-tenancy per company
-- Webhooks & third-party integrations
-- Analytics & monitoring dashboards
-- Advanced permission rules (ABAC)
+
+* Microservices transition 
+* GraphQL API Gateway
+* Multi-tenancy per company
+* Webhooks & third-party integrations
+* Analytics & monitoring dashboards
+* Advanced permission rules (ABAC)
 
 ---
 
 © 2025 TokDesk Enterprise Architecture - Designed by Basil Saleem
-
