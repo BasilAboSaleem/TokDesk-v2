@@ -6,6 +6,7 @@
     "test": "tests"
   },
   "scripts": {
+    "sass": "sass --watch scss:public/css",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
@@ -36,6 +37,7 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "sass": "^1.93.3"
   }
 }
