@@ -16,6 +16,8 @@ const connectDB = require("./config/db"); // MongoDB
 const redis = require("./config/redis");  // Redis
 
 // --------- Routes ----------
+const indexRoutes = require("./app/routes/index");
+
 /*
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -64,6 +66,7 @@ app.use(
 );
 
 // --------- Routes ----------
+app.use("/api", indexRoutes);
 /*
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
@@ -92,4 +95,4 @@ app.use((err, req, res, next) => {
 });
 
 // --------- Export App ----------
-module.exports = { app };
+module.exports = app;
