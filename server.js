@@ -6,7 +6,11 @@
 require('dotenv').config();
 const http = require("http");
 const { Server } = require("socket.io");
+<<<<<<< HEAD
 const app = require("./app");
+=======
+const { app } = require("./app");
+>>>>>>> 2c5a1538b45e98d3d7ba8312b271876486a634e1
 
 // --------- Environment ----------
 const PORT = process.env.PORT || 3000;
