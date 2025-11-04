@@ -1,0 +1,68 @@
+<header
+    class="tw-max-w-lg:tw-px-4 tw-max-w-lg:tw-mr-auto tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[60px] tw-w-full tw-bg-opacity-0 tw-px-[5%] lg:tw-justify-around"
+>
+    <!-- Logo -->
+    <a class="tw-h-[50px] tw-w-[50px] tw-p-[4px]" href="/">
+        <img
+            src="/landing/assets/logo/tokdesk-logo.png"
+            alt="TokDesk Logo"
+            class="tw-object tw-h-full tw-w-full"
+        />
+    </a>
+
+    <!-- Header Links -->
+    <div
+        class="collapsible-header animated-collapse max-lg:tw-shadow-md"
+        id="collapsed-header-items"
+    >
+        <div
+            class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base max-lg:tw-mt-[30px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-5 lg:tw-mx-auto lg:tw-place-items-center"
+        >
+            <a class="header-links" href="#about">About</a>
+            <a class="header-links" href="#features">Features</a>
+            <a class="header-links" href="#solutions">Solutions</a>
+            <a class="header-links" href="#pricing">Pricing</a>
+            <a class="header-links" href="#contact">Contact</a>
+        </div>
+
+        <!-- CTA Button -->
+        <div
+            class="tw-mx-4 tw-flex tw-place-items-center tw-gap-[20px] tw-text-base max-md:tw-w-full max-md:tw-flex-col max-md:tw-place-content-center"
+        >
+            <a
+                href="/signup"
+                aria-label="signup"
+                class="tw-rounded-full tw-bg-[#4F46E5] tw-px-4 tw-py-2 tw-text-white tw-transition-transform tw-duration-[0.3s] hover:tw-translate-x-2"
+            >
+                <span>Start Free</span>
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button
+        class="bi bi-list tw-absolute tw-right-3 tw-top-3 tw-z-50 tw-text-3xl tw-text-white lg:tw-hidden"
+        onclick="toggleHeader()"
+        aria-label="menu"
+        id="collapse-btn"
+    ></button>
+</header>
+
+<script>
+    // Toggle mobile menu
+    function toggleHeader() {
+        const headerItems = document.getElementById('collapsed-header-items');
+        headerItems.classList.toggle('tw-hidden');
+    }
+
+    // Add background on scroll
+    window.addEventListener('scroll', function () {
+        const header = document.querySelector('header');
+        if (window.scrollY > 50) {
+            header.classList.add('tw-bg-black', 'tw-bg-opacity-80');
+        } else {
+            header.classList.remove('tw-bg-black', 'tw-bg-opacity-80');
+        }
+    });
+</script>
