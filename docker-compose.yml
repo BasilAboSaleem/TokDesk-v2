@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: tokdesk_app
+    restart: always
+    env_file: .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - tokdesk_network
+
+  redis:
+    image: redis:7.0
+    container_name: tokdesk_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - tokdesk_network
+
+  nginx:
+    image: nginx:latest
+    container_name: tokdesk_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+    networks:
+      - tokdesk_network
+
+networks:
+  tokdesk_network:
+    driver: bridge

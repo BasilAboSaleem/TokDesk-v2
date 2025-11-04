@@ -1,0 +1,73 @@
+# ==================================================
+# TokDesk v2 - Docker Ignore File
+# ==================================================
+
+# Node modules (will be installed inside container)
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment and secrets
+.env
+.env.* 
+!.env.example
+
+# Logs
+logs
+*.log
+logs/*
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Build & coverage
+dist/
+build/
+coverage/
+.cache/
+.nyc_output/
+
+# Git & editor files
+.git
+.gitignore
+.gitattributes
+.vscode/
+.idea/
+*.iml
+
+# System files
+*.bak
+*.old
+*.orig
+
+# Local uploads (if mounted via volume, exclude from image)
+public/uploads/
+
+# Test files
+tests/
+__tests__/
+test/
+*.test.js
+*.spec.js
+
+# Docker itself
+Dockerfile*
+docker-compose.yml
+
+# Markdown documentation (optional - remove if you want it inside image)
+*.md
+!README.md
+!ARCHITECTURE.md
+!tok_desk_v_2_roles_permissions.md
+!scenario.md
