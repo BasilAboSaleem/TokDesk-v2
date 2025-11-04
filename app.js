@@ -16,7 +16,7 @@ const connectDB = require("./config/db"); // MongoDB
 const redis = require("./config/redis");  // Redis
 
 // --------- Routes ----------
-const indexRoutes = require("./app/routes/index");
+const landingRouter = require("./app/routes/landing");
 
 /*
 const authRoutes = require("./routes/authRoutes");
@@ -26,8 +26,13 @@ const departmentRoutes = require("./routes/departmentRoutes");
 const invitationRoutes = require("./routes/invitationRoutes");
 const announcementRoutes = require("./routes/announcementRoutes");
 */
+
 // --------- App Initialization ----------
 const app = express();
+
+// --------- View Engine Setup ----------
+app.set("view engine", "ejs"); 
+app.set("views", path.join(__dirname, "views")); 
 
 // --------- Database Connections ----------
 connectDB();
@@ -66,7 +71,7 @@ app.use(
 );
 
 // --------- Routes ----------
-app.use("/api", indexRoutes);
+app.use("/", landingRouter);
 /*
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
