@@ -5,7 +5,7 @@
 // --------- Imports ----------
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const methodOverride = require("method-override");
+const methodOverride = require("method-override"); 
 const morgan = require("morgan"); 
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
@@ -15,17 +15,6 @@ const path = require("path");
 const connectDB = require("./config/db"); // MongoDB
 const redis = require("./config/redis");  // Redis
 
-// --------- Routes ----------
-const landingRouter = require("./app/routes/landing");
-
-/*
-const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
-const companyRoutes = require("./routes/companyRoutes");
-const departmentRoutes = require("./routes/departmentRoutes");
-const invitationRoutes = require("./routes/invitationRoutes");
-const announcementRoutes = require("./routes/announcementRoutes");
-*/
 
 // --------- App Initialization ----------
 const app = express();
@@ -40,17 +29,17 @@ redis.on("connect", () => console.log("✅ Redis connected"));
 redis.on("error", (err) => console.error("❌ Redis error:", err));
 
 // --------- Middleware ----------
-// Body parsers
+// Body parsers 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Internationalization (i18n)
 const i18nMiddleware = require("./app/middlewares/i18n");
-i18nMiddleware(app);
+i18nMiddleware(app); 
 
-// Cookies
-app.use(cookieParser());
-
+// Cookies 
+app.use(cookieParser());     
+ 
 // Method override for forms
 app.use(methodOverride("_method"));
 
@@ -73,6 +62,19 @@ app.use(
     message: "Too many requests, please slow down.",
   })
 );
+
+// --------- Routes ----------
+
+const landingRouter = require("./app/routes/landing");
+
+/*
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+const companyRoutes = require("./routes/companyRoutes");
+const departmentRoutes = require("./routes/departmentRoutes");
+const invitationRoutes = require("./routes/invitationRoutes");
+const announcementRoutes = require("./routes/announcementRoutes");
+*/
 
 // --------- Routes ----------
 app.use("/", landingRouter);
