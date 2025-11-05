@@ -44,6 +44,10 @@ redis.on("error", (err) => console.error("❌ Redis error:", err));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Internationalization (i18n)
+const i18nMiddleware = require("./app/middlewares/i18n");
+i18nMiddleware(app);
+
 // Cookies
 app.use(cookieParser());
 
