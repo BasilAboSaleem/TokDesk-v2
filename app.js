@@ -66,9 +66,10 @@ app.use(
 // --------- Routes ----------
 
 const landingRouter = require("./app/routes/landing");
+const authRoutes = require("./app/routes/authRoutes");
+
 
 /*
-const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const companyRoutes = require("./routes/companyRoutes");
 const departmentRoutes = require("./routes/departmentRoutes");
@@ -78,8 +79,9 @@ const announcementRoutes = require("./routes/announcementRoutes");
 
 // --------- Routes ----------
 app.use("/", landingRouter);
+app.use("/auth", authRoutes);
 /*
-app.use("/api/auth", authRoutes);
+
 app.use("/api/users", userRoutes);
 app.use("/api/companies", companyRoutes);
 app.use("/api/departments", departmentRoutes);
