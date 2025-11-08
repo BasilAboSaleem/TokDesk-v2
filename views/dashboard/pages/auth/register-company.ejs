@@ -9,133 +9,180 @@
 >
   <%- include('../../partials/head.ejs') %>
 
-  <body style="background-color: #121212;"> <!-- شاشة دارك كاملة -->
-    <!-- Content -->
+  <body style="background-color: #121212;">
     <div class="authentication-wrapper authentication-basic min-vh-100 d-flex align-items-center justify-content-center">
       <div class="authentication-inner w-100" style="max-width: 550px;">
-        <div class="card shadow-lg" style="background-color: #1e1e1e; color: #ffffff;"> <!-- كارد بدرجة أفتح -->
-          <div class="card-body p-4">
-            <!-- Logo -->
-            <div class="app-brand justify-content-center mb-4">
-              <a href="/" class="app-brand-link gap-2 text-white">
-                <span class="app-brand-logo demo">
-                  <!-- SVG Logo Here -->
-                  <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                    <!-- ...SVG paths unchanged... -->
-                  </svg>
-                </span>
-                <span class="app-brand-text demo fw-bolder">Sneat</span>
-              </a>
-            </div>
-            <!-- /Logo -->
-
-            <h4 class="mb-2 text-center">Adventure starts here 🚀</h4>
-            <p class="mb-4 text-center">Make your app management easy and fun!</p>
-
-            <!-- Registration Form -->
-            <form id="registerForm" class="mb-3">
-              <!-- Step 1: Company Details -->
-              <div id="step1">
-                <h4 class="mb-3">Company Details</h4>
-
-                <div class="mb-3">
-                  <label for="companyName" class="form-label">Company Name</label>
-                  <input type="text" class="form-control bg-dark text-white border-secondary" id="companyName" name="companyName" required />
-                </div>
-
-                <div class="mb-3">
-                  <label for="companyEmail" class="form-label">Company Email</label>
-                  <input type="email" class="form-control bg-dark text-white border-secondary" id="companyEmail" name="companyEmail" required />
-                </div>
-
-                <div class="mb-3">
-                  <label for="subdomain" class="form-label">Subdomain</label>
-                  <input type="text" class="form-control bg-dark text-white border-secondary" id="subdomain" name="subdomain" required />
-                </div>
-
-                <div class="mb-3">
-                  <label for="logo" class="form-label">Logo</label>
-                  <input type="file" class="form-control bg-dark text-white border-secondary" id="logo" name="logo" />
-                </div>
-
-                <button type="button" class="btn btn-primary w-100" id="toStep2">Next</button>
-              </div>
-
-              <!-- Step 2: Admin Details -->
-              <div id="step2" style="display: none;">
-                <h4 class="mb-3">Admin Details</h4>
-
-                <div class="mb-3">
-                  <label for="adminName" class="form-label">Name</label>
-                  <input type="text" class="form-control bg-dark text-white border-secondary" id="adminName" name="adminName" required />
-                </div>
-
-                <div class="mb-3">
-                  <label for="adminEmail" class="form-label">Email</label>
-                  <input type="email" class="form-control bg-dark text-white border-secondary" id="adminEmail" name="adminEmail" required />
-                </div>
-
-                <div class="mb-3 form-password-toggle">
-                  <label class="form-label" for="adminPassword">Password</label>
-                  <div class="input-group input-group-merge">
-                    <input type="password" id="adminPassword" class="form-control bg-dark text-white border-secondary" name="adminPassword" required />
-                    <span class="input-group-text cursor-pointer bg-dark text-white border-secondary"><i class="bx bx-hide"></i></span>
-                  </div>
-                </div>
-
-                <div class="mb-3 form-password-toggle">
-                  <label class="form-label" for="confirmPassword">Confirm Password</label>
-                  <input type="password" id="confirmPassword" class="form-control bg-dark text-white border-secondary" name="confirmPassword" required />
-                </div>
-
-                <div class="d-flex justify-content-between">
-                  <button type="button" class="btn btn-secondary w-45" id="backToStep1">Back</button>
-                  <button type="submit" class="btn btn-success w-45">Register Company & Admin</button>
-                </div>
-              </div>
-            </form>
-
-            <p class="text-center mt-3 text-white">
-              <span>Already have an account?</span>
-              <a href="auth-login-basic.html" class="fw-bold text-white">Sign in instead</a>
-            </p>
+        <div class="card shadow-lg" style="background-color: #1e1e1e; color: #ffffff;">
+          <div class="app-brand justify-content-center mb-4">
+            <a href="/" class="app-brand-link gap-2 text-white">
+              <span class="app-brand-text demo fw-bolder">TokDesk</span>
+            </a>
           </div>
+
+          <h4 class="mb-2 text-center">Adventure starts here 🚀</h4>
+          <p class="mb-4 text-center">Register your company to get started</p>
+
+          <!-- Registration Form -->
+          <form id="registerForm" class="mb-3" action="/auth/register-company" method="POST" enctype="multipart/form-data">
+            <!-- Step 1 -->
+            <div id="step1">
+              <h4 class="mb-3">Company Details</h4>
+
+              <div class="mb-3">
+                <label for="companyName" class="form-label">Company Name</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary" id="companyName" name="company[name]" required />
+                <small class="text-danger error-text" id="error-companyName"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="companyEmail" class="form-label">Company Email</label>
+                <input type="email" class="form-control bg-dark text-white border-secondary" id="companyEmail" name="company[email]" required />
+                <small class="text-danger error-text" id="error-companyEmail"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="subdomain" class="form-label">Subdomain</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary" id="subdomain" name="company[subdomain]" required />
+                <small class="text-danger error-text" id="error-subdomain"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="logo" class="form-label">Logo</label>
+                <input type="file" class="form-control bg-dark text-white border-secondary" id="logo" name="logo" />
+              </div>
+
+              <button type="button" class="btn btn-primary w-100" id="toStep2">Next</button>
+            </div>
+
+            <!-- Step 2 -->
+            <div id="step2" style="display:none;">
+              <h4 class="mb-3">Admin Details</h4>
+
+              <div class="mb-3">
+                <label for="adminName" class="form-label">Admin Name</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary" id="adminName" name="admin[name]" required />
+                <small class="text-danger error-text" id="error-adminName"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="adminEmail" class="form-label">Admin Email</label>
+                <input type="email" class="form-control bg-dark text-white border-secondary" id="adminEmail" name="admin[email]" required />
+                <small class="text-danger error-text" id="error-adminEmail"></small>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="adminPassword">Password</label>
+                <input type="password" id="adminPassword" class="form-control bg-dark text-white border-secondary" name="admin[password]" required />
+                <small class="text-danger error-text" id="error-adminPassword"></small>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="form-control bg-dark text-white border-secondary" name="admin[confirmPassword]" required />
+                <small class="text-danger error-text" id="error-confirmPassword"></small>
+              </div>
+
+              <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary w-45" id="backToStep1">Back</button>
+                <button type="submit" class="btn btn-success w-45">Register</button>
+              </div>
+            </div>
+          </form>
+
+          <p class="text-center mt-3 text-white">
+            <span>Already have an account?</span>
+            <a href="/auth/login" class="fw-bold text-white">Sign in instead</a>
+          </p>
+
+          <div id="alertBox" class="alert text-center mt-3" style="display:none;"></div>
         </div>
-        <!-- Register Card -->
       </div>
     </div>
-    <!-- / Content -->
 
-    <!-- Core JS -->
     <%- include('../../partials/scripts.ejs') %>
 
-    <!-- Stepper Form JS -->
     <script>
-      const step1 = document.getElementById('step1');
-      const step2 = document.getElementById('step2');
-      const toStep2Btn = document.getElementById('toStep2');
-      const backToStep1Btn = document.getElementById('backToStep1');
+      document.addEventListener("DOMContentLoaded", () => {
+        const step1 = document.getElementById("step1");
+        const step2 = document.getElementById("step2");
+        const toStep2Btn = document.getElementById("toStep2");
+        const backBtn = document.getElementById("backToStep1");
+        const form = document.getElementById("registerForm");
+        const alertBox = document.getElementById("alertBox");
 
-      toStep2Btn.addEventListener('click', () => {
-        step1.style.display = 'none';
-        step2.style.display = 'block';
-      });
+        // Next button validation for Step 1
+        toStep2Btn.addEventListener("click", () => {
+          const requiredFields = [
+            { id: "companyName", msg: "Company name is required" },
+            { id: "companyEmail", msg: "Company email is required" },
+            { id: "subdomain", msg: "Subdomain is required" },
+          ];
 
-      backToStep1Btn.addEventListener('click', () => {
-        step2.style.display = 'none';
-        step1.style.display = 'block';
-      });
+          let valid = true;
+          requiredFields.forEach(f => {
+            const input = document.getElementById(f.id);
+            const errorField = document.getElementById("error-" + f.id);
+            if (!input.value.trim()) {
+              errorField.textContent = f.msg;
+              valid = false;
+            } else {
+              errorField.textContent = "";
+            }
+          });
 
-      const registerForm = document.getElementById('registerForm');
-      registerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        // جمع بيانات الفورم وإرسالها للـ Backend
+          if (valid) {
+            step1.style.display = "none";
+            step2.style.display = "block";
+          }
+        });
+
+        backBtn.addEventListener("click", () => {
+          step2.style.display = "none";
+          step1.style.display = "block";
+        });
+
+        // Handle submission
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          alertBox.style.display = "none";
+          document.querySelectorAll(".error-text").forEach(el => (el.textContent = ""));
+
+          const formData = new FormData(form);
+
+          try {
+            const res = await fetch("/auth/register-company", {
+              method: "POST",
+              body: formData,
+            });
+
+            const data = await res.json();
+
+            if (data.errors) {
+              data.errors.forEach(err => {
+                const fieldError = document.getElementById("error-" + err.path);
+                if (fieldError) fieldError.textContent = err.msg;
+              });
+              alertBox.className = "alert alert-danger text-center mt-3";
+              alertBox.textContent = "Please fix the errors below.";
+              alertBox.style.display = "block";
+            } else {
+              alertBox.className = "alert alert-success text-center mt-3";
+              alertBox.textContent = "🎉 Company and Admin registered successfully!";
+              alertBox.style.display = "block";
+              setTimeout(() => window.location.href = "/dashboard", 1500);
+            }
+          } catch (error) {
+            alertBox.className = "alert alert-danger text-center mt-3";
+            alertBox.textContent = "Something went wrong. Try again.";
+            alertBox.style.display = "block";
+          }
+        });
       });
     </script>
 
     <style>
-      #step1, #step2 {
-        transition: all 0.3s ease-in-out;
+      .error-text {
+        font-size: 0.85rem;
       }
       .w-45 {
         width: 48%;
