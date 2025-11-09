@@ -8,6 +8,10 @@ class UserRepository {
   async findByEmailAndCompany(email, companyId) {
     return User.findOne({ email, company: companyId });
   }
+
+  async findByEmail(email) {
+    return User.findOne({ email });
+  }
 }
 
 module.exports = new UserRepository();

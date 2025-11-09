@@ -2,6 +2,8 @@ const CompanyRepo = require('../repositories/companyRepository');
 const UserRepo = require('../repositories/userRepository');
 const ROLES = require('../constants/roles');
 const cloudinary = require('cloudinary').v2;
+const jwt = require('jsonwebtoken');
+
 
 class registerCompany {
   async registerCompany(data, file) {
@@ -47,5 +49,27 @@ class registerCompany {
   }
 }
 
+class login {
+  async login(data) {
+    const { email, password } = data;
 
-module.exports = new registerCompany();
+    // validations
+    const user = await UserRepo.findByEmail(email);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      throw new Error('Invalid password');
+    }
+
+    // generate token
+    const token = user.generateAuthToken();
+    return { user, token };
+  }
+}
+
+module.exports = {
+  registerCompany: new registerCompany(),
+  loginService: new login()
+};
