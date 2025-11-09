@@ -7,13 +7,16 @@ exports.renderRegisterCompanyPage = (req, res) => {
 exports.registerCompany = async (req, res) => {
   try {
     const result = await authService.registerCompany(req.body, req.file);
-
-    res.redirect('/login');
-} catch (err) {
-    res.status(400).render('dashboard/pages/auth/register-company', {
-      error: err.message,
-      old: req.body,
-      errors: []
-    }); 
+return res.status(200).json({ 
+      success: true, 
+      message: "Company and Admin registered successfully!",
+      redirect: "/auth/login" 
+    });
+ } catch (err) {
+    res.status(400).json({
+      errors: [
+        { msg: err.message, path: 'server' }
+      ]
+    });
   }
 };

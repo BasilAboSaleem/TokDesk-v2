@@ -101,84 +101,116 @@
 
     <%- include('../../partials/scripts.ejs') %>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const step1 = document.getElementById("step1");
-        const step2 = document.getElementById("step2");
-        const toStep2Btn = document.getElementById("toStep2");
-        const backBtn = document.getElementById("backToStep1");
-        const form = document.getElementById("registerForm");
-        const alertBox = document.getElementById("alertBox");
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const step1 = document.getElementById("step1");
+    const step2 = document.getElementById("step2");
+    const toStep2Btn = document.getElementById("toStep2");
+    const backBtn = document.getElementById("backToStep1");
+    const form = document.getElementById("registerForm");
+    const alertBox = document.getElementById("alertBox");
 
-        // Next button validation for Step 1
-        toStep2Btn.addEventListener("click", () => {
-          const requiredFields = [
-            { id: "companyName", msg: "Company name is required" },
-            { id: "companyEmail", msg: "Company email is required" },
-            { id: "subdomain", msg: "Subdomain is required" },
-          ];
+    // === Step 1 Validation ===
+    toStep2Btn.addEventListener("click", () => {
+      const requiredFields = [
+        { id: "companyName", msg: "Company name is required" },
+        { id: "companyEmail", msg: "Company email is required" },
+        { id: "subdomain", msg: "Subdomain is required" },
+      ];
 
-          let valid = true;
-          requiredFields.forEach(f => {
-            const input = document.getElementById(f.id);
-            const errorField = document.getElementById("error-" + f.id);
-            if (!input.value.trim()) {
-              errorField.textContent = f.msg;
-              valid = false;
+      let valid = true;
+      requiredFields.forEach(f => {
+        const input = document.getElementById(f.id);
+        const errorField = document.getElementById("error-" + f.id);
+        if (!input.value.trim()) {
+          errorField.textContent = f.msg;
+          valid = false;
+        } else {
+          errorField.textContent = "";
+        }
+      });
+
+      if (valid) {
+        step1.style.display = "none";
+        step2.style.display = "block";
+      }
+    });
+
+    // Back to Step 1
+    backBtn.addEventListener("click", () => {
+      step2.style.display = "none";
+      step1.style.display = "block";
+    });
+
+    // === Handle Submission ===
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      alertBox.style.display = "none";
+      document.querySelectorAll(".error-text").forEach(el => (el.textContent = ""));
+
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch("/auth/register-company", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        // 🔹 Handle Validation Errors
+        if (data.errors && Array.isArray(data.errors)) {
+          data.errors.forEach(err => {
+            const safePath = err.path
+              .replace(/\./g, '')
+              .replace(/\[/g, '')
+              .replace(/\]/g, '')
+              .replace(/[^a-zA-Z0-9]/g, '');
+            const fieldId = "error-" + safePath;
+            const fieldError = document.getElementById(fieldId);
+            if (fieldError) {
+              fieldError.textContent = err.msg;
             } else {
-              errorField.textContent = "";
+              console.warn("⚠️ Unknown field from backend:", err.path);
             }
           });
 
-          if (valid) {
-            step1.style.display = "none";
-            step2.style.display = "block";
-          }
-        });
+          alertBox.className = "alert alert-danger text-center mt-3";
+          alertBox.textContent = "Please fix the errors below.";
+          alertBox.style.display = "block";
+          return;
+        }
 
-        backBtn.addEventListener("click", () => {
-          step2.style.display = "none";
-          step1.style.display = "block";
-        });
+        // 🔹 Handle Successful Registration
+        if (data.success) {
+          alertBox.className = "alert alert-success text-center mt-3";
+          alertBox.textContent = data.message;
+          alertBox.style.display = "block";
 
-        // Handle submission
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          alertBox.style.display = "none";
-          document.querySelectorAll(".error-text").forEach(el => (el.textContent = ""));
+          // Redirect بعد فترة قصيرة
+          setTimeout(() => {
+            window.location.href = data.redirect || "/auth/login";
+          }, 1500);
+          return;
+        }
 
-          const formData = new FormData(form);
+        // 🔹 Unexpected Response
+        alertBox.className = "alert alert-warning text-center mt-3";
+        alertBox.textContent = "Unexpected response from server.";
+        alertBox.style.display = "block";
 
-          try {
-            const res = await fetch("/auth/register-company", {
-              method: "POST",
-              body: formData,
-            });
+      } catch (error) {
+        console.error("❌ Fetch error:", error);
+        alertBox.className = "alert alert-danger text-center mt-3";
+        alertBox.textContent = "Something went wrong. Please try again.";
+        alertBox.style.display = "block";
+      }
+    });
+  });
+</script>
 
-            const data = await res.json();
 
-            if (data.errors) {
-              data.errors.forEach(err => {
-                const fieldError = document.getElementById("error-" + err.path);
-                if (fieldError) fieldError.textContent = err.msg;
-              });
-              alertBox.className = "alert alert-danger text-center mt-3";
-              alertBox.textContent = "Please fix the errors below.";
-              alertBox.style.display = "block";
-            } else {
-              alertBox.className = "alert alert-success text-center mt-3";
-              alertBox.textContent = "🎉 Company and Admin registered successfully!";
-              alertBox.style.display = "block";
-              setTimeout(() => window.location.href = "/dashboard", 1500);
-            }
-          } catch (error) {
-            alertBox.className = "alert alert-danger text-center mt-3";
-            alertBox.textContent = "Something went wrong. Try again.";
-            alertBox.style.display = "block";
-          }
-        });
-      });
-    </script>
+
 
     <style>
       .error-text {

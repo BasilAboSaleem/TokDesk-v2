@@ -4,19 +4,19 @@ const ROLES = require('../constants/roles');
 const cloudinary = require('cloudinary').v2;
 
 class registerCompany {
-  async registerCompanyAndAdmin(data, file) {
+  async registerCompany(data, file) {
     const { company, admin } = data;  
     const { name: companyName, email: companyEmail, subdomain } = company;
     const { name: adminName, email: adminEmail, password: adminPassword } = admin;
 
     // validations 
     if (await CompanyRepo.findByEmail(companyEmail)) {
-      throw new Error('Company email already exists');
+      throw new Error('Company email already exists');  
     }
     if (await CompanyRepo.findBySubdomain(subdomain)) {
-      throw new Error('Subdomain already exists');
+      throw new Error('Subdomain already exists'); 
     }
-   
+  
     // upload logo to Cloudinary
     let logoUrl = '';
     if (file) {
