@@ -20,3 +20,7 @@ return res.status(200).json({
     });
   }
 };
+
+exports.renderLoginPage = (req, res) => {
+  res.render('dashboard/pages/auth/login'); 
+}

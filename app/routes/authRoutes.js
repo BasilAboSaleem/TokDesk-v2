@@ -8,5 +8,6 @@ const upload = multer({ dest: "uploads/" });
 router.get('/register', authController.renderRegisterCompanyPage);
 router.post('/register-company', upload.single('logo'), registerCompanyValidator, authController.registerCompany);
 
+router.get('/login', authController.renderLoginPage);
 
 module.exports = router; 
