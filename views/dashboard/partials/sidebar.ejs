@@ -1,0 +1,124 @@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+  <!-- Brand -->
+  <div class="app-brand demo">
+    <a href="/dashboard" class="app-brand-link">
+      <span class="app-brand-logo demo">
+        <!-- SVG Logo -->
+      </span>
+      <span class="app-brand-text demo menu-text fw-bolder ms-2">TokDesk</span>
+    </a>
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+      <i class="bx bx-chevron-left bx-sm align-middle"></i>
+    </a>
+  </div>
+
+  <div class="menu-inner-shadow"></div>
+
+  <ul class="menu-inner py-1">
+    <!-- Dashboard للجميع -->
+    <li class="menu-item <%= (page === 'dashboard') ? 'active' : '' %>">
+      <a href="/dashboard" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+        <div data-i18n="Dashboard">Dashboard</div>
+      </a>
+    </li>
+
+    <!-- Admin & SuperAdmin -->
+    <% if (user && [ROLES.SUPER_ADMIN, ROLES.ADMIN].includes(user.role)) { %>
+      <li class="menu-header small text-uppercase"><span class="menu-header-text">Administration</span></li>
+      
+      <li class="menu-item">
+        <a href="/dashboard/companies" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-building"></i>
+          <div data-i18n="Companies">Companies</div>
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a href="/dashboard/users" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-user"></i>
+          <div data-i18n="Users">Users</div>
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a href="/dashboard/departments" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-grid"></i>
+          <div data-i18n="Departments">Departments</div>
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a href="/dashboard/invitations" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-envelope"></i>
+          <div data-i18n="Invitations">Invitations</div>
+        </a>
+      </li>
+    <% } %>
+
+    <!-- Head of Department & Project Manager -->
+    <% if (user && [ROLES.HEAD_OF_DEPARTMENT, ROLES.PROJECT_MANAGER].includes(user.role)) { %>
+      <li class="menu-header small text-uppercase"><span class="menu-header-text">Management</span></li>
+
+      <li class="menu-item">
+        <a href="/dashboard/conversations" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-chat"></i>
+          <div data-i18n="Conversations">Conversations</div>
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a href="/dashboard/messages" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-message"></i>
+          <div data-i18n="Messages">Messages</div>
+        </a>
+      </li>
+    <% } %>
+
+    <!-- Employees -->
+    <% if (user && user.role === ROLES.EMPLOYEE) { %>
+      <li class="menu-header small text-uppercase"><span class="menu-header-text">Employee</span></li>
+      <li class="menu-item">
+        <a href="/dashboard/tasks" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-task"></i>
+          <div data-i18n="Tasks">Tasks</div>
+        </a>
+      </li>
+    <% } %>
+
+    <!-- Guests -->
+    <% if (user && user.role === ROLES.GUEST) { %>
+      <li class="menu-item">
+        <a href="/dashboard/guest-info" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-info-circle"></i>
+          <div data-i18n="Guest Info">Guest Info</div>
+        </a>
+      </li>
+    <% } %>
+
+    <!-- Announcements لجميع المستخدمين -->
+    <li class="menu-item">
+      <a href="/dashboard/announcements" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-megaphone"></i>
+        <div data-i18n="Announcements">Announcements</div>
+      </a>
+    </li>
+
+    <!-- Profile -->
+    <li class="menu-header small text-uppercase"><span class="menu-header-text">Account</span></li>
+    <li class="menu-item">
+      <a href="/dashboard/profile" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-user-circle"></i>
+        <div data-i18n="Profile">Profile</div>
+      </a>
+    </li>
+
+    <!-- Logout -->
+    <li class="menu-item">
+      <a href="/auth/logout" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-power-off"></i>
+        <div data-i18n="Logout">Logout</div>
+      </a>
+    </li>
+  </ul>
+</aside>

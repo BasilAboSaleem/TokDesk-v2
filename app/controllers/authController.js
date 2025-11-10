@@ -26,6 +26,7 @@ exports.renderLoginPage = (req, res) => {
 exports.login = async (req, res) => {
   try {
     const token = await loginService.login(req.body);
+    res.cookie("token", token, { httpOnly: true, maxAge: 24*60*60*1000 });
     res.status(200).json({
       success: true,
       message: "Login successful!",

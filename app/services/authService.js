@@ -65,7 +65,7 @@ class login {
 
     // generate token
     const token = user.generateAuthToken();
-    return { user, token };
+    return  token ;
   }
 }
 
