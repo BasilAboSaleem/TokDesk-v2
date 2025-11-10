@@ -15,6 +15,10 @@ const path = require("path");
 const connectDB = require("./config/db"); // MongoDB
 const redis = require("./config/redis");  // Redis
 
+// --------- Middlewares ----------
+const i18nMiddleware = require("./app/middlewares/i18n");
+const authMiddleware = require("./app/middlewares/authMiddleware");
+const authorize = require("./app/middlewares/authorize");
 
 // --------- App Initialization ----------
 const app = express();
@@ -28,18 +32,18 @@ connectDB();
 redis.on("connect", () => console.log("✅ Redis connected"));
 redis.on("error", (err) => console.error("❌ Redis error:", err));
 
-// --------- Middleware ----------
-// Body parsers 
+// --------- Global Middleware ----------
+
+// Body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Internationalization (i18n)
-const i18nMiddleware = require("./app/middlewares/i18n");
 i18nMiddleware(app); 
 
-// Cookies 
+// Cookies
 app.use(cookieParser());     
- 
+
 // Method override for forms
 app.use(methodOverride("_method"));
 
@@ -67,28 +71,47 @@ app.use(
 
 const landingRouter = require("./app/routes/landing");
 const authRoutes = require("./app/routes/authRoutes");
-
-
 /*
-const userRoutes = require("./routes/userRoutes");
-const companyRoutes = require("./routes/companyRoutes");
-const departmentRoutes = require("./routes/departmentRoutes");
-const invitationRoutes = require("./routes/invitationRoutes");
-const announcementRoutes = require("./routes/announcementRoutes");
+const userRoutes = require("./app/routes/userRoutes");
+const companyRoutes = require("./app/routes/companyRoutes");
+const departmentRoutes = require("./app/routes/departmentRoutes");
+const invitationRoutes = require("./app/routes/invitationRoutes");
+const announcementRoutes = require("./app/routes/announcementRoutes");
 */
-
-// --------- Routes ----------
+// Public routes
 app.use("/", landingRouter);
 app.use("/auth", authRoutes);
-/*
 
+// --------- Auth & Global User Middleware ----------
+
+// 🔹 Authentication: verify token & populate req.user
+app.use(authMiddleware);
+
+// 🔹 Global User Injection: make user available in all views
+app.use((req, res, next) => {
+  res.locals.user = req.user
+    ? {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        role: req.user.role,
+        company: req.user.company,
+      }
+    : null;
+  next();
+});
+
+
+
+
+// Protected routes (authMiddleware + authorize can be used inside these routes)
+/*
 app.use("/api/users", userRoutes);
 app.use("/api/companies", companyRoutes);
 app.use("/api/departments", departmentRoutes);
 app.use("/api/invitations", invitationRoutes);
 app.use("/api/announcements", announcementRoutes);
 */
-
 // --------- Health Check ----------
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date() });
