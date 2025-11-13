@@ -67,6 +67,23 @@ app.use(
   })
 );
 
+// --------- Custom Middleware for Direct Messages & Online Users ----------
+app.use(async (req, res, next) => {
+  try {
+    // fake data for demonstration; replace with real DB calls
+    res.locals.directMessages = []; // or await getDirectMessagesForUser(req.user.id)
+    res.locals.onlineUsers = []; // or await getOnlineUsers()
+
+    next();
+  } catch (err) {
+    console.error(err);
+    res.locals.directMessages = [];
+    res.locals.onlineUsers = [];
+    next();
+  }
+});
+
+
 // --------- Routes ----------
 
 const landingRouter = require("./app/routes/landing");
