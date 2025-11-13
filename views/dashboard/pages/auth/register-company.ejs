@@ -1,84 +1,77 @@
 <!DOCTYPE html>
-<html
-  lang="en"
-  class="dark-style customizer-hide"
-  dir="ltr"
-  data-theme="dark"
-  data-assets-path="dashboard/assets/"
-  data-template="vertical-menu-template-free"
->
+<html>
   <%- include('../../partials/head.ejs') %>
 
-  <body style="background-color: #121212;">
-    <div class="authentication-wrapper authentication-basic min-vh-100 d-flex align-items-center justify-content-center">
-      <div class="authentication-inner w-100" style="max-width: 550px;">
-        <div class="card shadow-lg" style="background-color: #1e1e1e; color: #ffffff;">
-          <div class="app-brand justify-content-center mb-4">
-            <a href="/" class="app-brand-link gap-2 text-white">
-              <span class="app-brand-text demo fw-bolder">TokDesk</span>
-            </a>
+  <body class="bmd-layout-container bmd-drawer-f-l avam-container">
+    <main class="bmd-layout-content">
+      <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
+        <div class="card shadow-lg p-4" style="max-width: 550px; width:100%;">
+          <!-- Brand / Logo -->
+          <div class="text-center mb-4">
+            <img src="/dashboard/svg/logo.svg" alt="Logo" height="130" width="300">
           </div>
 
           <h4 class="mb-2 text-center">Adventure starts here 🚀</h4>
           <p class="mb-4 text-center">Register your company to get started</p>
 
           <!-- Registration Form -->
-          <form id="registerForm" class="mb-3" action="/auth/register-company" method="POST" enctype="multipart/form-data">
-            <!-- Step 1 -->
+          <form id="registerForm" action="/auth/register-company" method="POST" enctype="multipart/form-data">
+            
+            <!-- Step 1: Company Details -->
             <div id="step1">
-              <h4 class="mb-3">Company Details</h4>
+              <h5 class="mb-3">Company Details</h5>
 
               <div class="mb-3">
                 <label for="companyName" class="form-label">Company Name</label>
-                <input type="text" class="form-control bg-dark text-white border-secondary" id="companyName" name="company[name]" required />
+                <input type="text" class="form-control bg-light text-dark" id="companyName" name="company[name]" required>
                 <small class="text-danger error-text" id="error-companyName"></small>
               </div>
 
               <div class="mb-3">
                 <label for="companyEmail" class="form-label">Company Email</label>
-                <input type="email" class="form-control bg-dark text-white border-secondary" id="companyEmail" name="company[email]" required />
+                <input type="email" class="form-control bg-light text-dark" id="companyEmail" name="company[email]" required>
                 <small class="text-danger error-text" id="error-companyEmail"></small>
               </div>
 
               <div class="mb-3">
                 <label for="subdomain" class="form-label">Subdomain</label>
-                <input type="text" class="form-control bg-dark text-white border-secondary" id="subdomain" name="company[subdomain]" required />
+                <input type="text" class="form-control bg-light text-dark" id="subdomain" name="company[subdomain]" required>
                 <small class="text-danger error-text" id="error-subdomain"></small>
               </div>
 
               <div class="mb-3">
                 <label for="logo" class="form-label">Logo</label>
-                <input type="file" class="form-control bg-dark text-white border-secondary" id="logo" name="logo" />
+                <input type="file" class="form-control" id="logo" name="logo">
               </div>
 
               <button type="button" class="btn btn-primary w-100" id="toStep2">Next</button>
             </div>
 
-            <!-- Step 2 -->
+            <!-- Step 2: Admin Details -->
             <div id="step2" style="display:none;">
-              <h4 class="mb-3">Admin Details</h4>
+              <h5 class="mb-3">Admin Details</h5>
 
               <div class="mb-3">
                 <label for="adminName" class="form-label">Admin Name</label>
-                <input type="text" class="form-control bg-dark text-white border-secondary" id="adminName" name="admin[name]" required />
+                <input type="text" class="form-control bg-light text-dark" id="adminName" name="admin[name]" required>
                 <small class="text-danger error-text" id="error-adminName"></small>
               </div>
 
               <div class="mb-3">
                 <label for="adminEmail" class="form-label">Admin Email</label>
-                <input type="email" class="form-control bg-dark text-white border-secondary" id="adminEmail" name="admin[email]" required />
+                <input type="email" class="form-control bg-light text-dark" id="adminEmail" name="admin[email]" required>
                 <small class="text-danger error-text" id="error-adminEmail"></small>
               </div>
 
               <div class="mb-3">
-                <label class="form-label" for="adminPassword">Password</label>
-                <input type="password" id="adminPassword" class="form-control bg-dark text-white border-secondary" name="admin[password]" required />
+                <label for="adminPassword" class="form-label">Password</label>
+                <input type="password" class="form-control bg-light text-dark" id="adminPassword" name="admin[password]" required>
                 <small class="text-danger error-text" id="error-adminPassword"></small>
               </div>
 
               <div class="mb-3">
-                <label class="form-label" for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" class="form-control bg-dark text-white border-secondary" name="admin[confirmPassword]" required />
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control bg-light text-dark" id="confirmPassword" name="admin[confirmPassword]" required>
                 <small class="text-danger error-text" id="error-confirmPassword"></small>
               </div>
 
@@ -89,139 +82,106 @@
             </div>
           </form>
 
-          <p class="text-center mt-3 text-white">
+          <p class="text-center mt-3">
             <span>Already have an account?</span>
-            <a href="/auth/login" class="fw-bold text-white">Sign in instead</a>
+            <a href="/auth/login" class="fw-bold">Sign in instead</a>
           </p>
 
           <div id="alertBox" class="alert text-center mt-3" style="display:none;"></div>
         </div>
       </div>
-    </div>
+    </main>
 
     <%- include('../../partials/scripts.ejs') %>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const step1 = document.getElementById("step1");
-    const step2 = document.getElementById("step2");
-    const toStep2Btn = document.getElementById("toStep2");
-    const backBtn = document.getElementById("backToStep1");
-    const form = document.getElementById("registerForm");
-    const alertBox = document.getElementById("alertBox");
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const step1 = document.getElementById("step1");
+        const step2 = document.getElementById("step2");
+        const toStep2Btn = document.getElementById("toStep2");
+        const backBtn = document.getElementById("backToStep1");
+        const form = document.getElementById("registerForm");
+        const alertBox = document.getElementById("alertBox");
 
-    // === Step 1 Validation ===
-    toStep2Btn.addEventListener("click", () => {
-      const requiredFields = [
-        { id: "companyName", msg: "Company name is required" },
-        { id: "companyEmail", msg: "Company email is required" },
-        { id: "subdomain", msg: "Subdomain is required" },
-      ];
-
-      let valid = true;
-      requiredFields.forEach(f => {
-        const input = document.getElementById(f.id);
-        const errorField = document.getElementById("error-" + f.id);
-        if (!input.value.trim()) {
-          errorField.textContent = f.msg;
-          valid = false;
-        } else {
-          errorField.textContent = "";
-        }
-      });
-
-      if (valid) {
-        step1.style.display = "none";
-        step2.style.display = "block";
-      }
-    });
-
-    // Back to Step 1
-    backBtn.addEventListener("click", () => {
-      step2.style.display = "none";
-      step1.style.display = "block";
-    });
-
-    // === Handle Submission ===
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      alertBox.style.display = "none";
-      document.querySelectorAll(".error-text").forEach(el => (el.textContent = ""));
-
-      const formData = new FormData(form);
-
-      try {
-        const res = await fetch("/auth/register-company", {
-          method: "POST",
-          body: formData,
-        });
-
-        const data = await res.json();
-
-        // 🔹 Handle Validation Errors
-        if (data.errors && Array.isArray(data.errors)) {
-          data.errors.forEach(err => {
-            const safePath = err.path
-              .replace(/\./g, '')
-              .replace(/\[/g, '')
-              .replace(/\]/g, '')
-              .replace(/[^a-zA-Z0-9]/g, '');
-            const fieldId = "error-" + safePath;
-            const fieldError = document.getElementById(fieldId);
-            if (fieldError) {
-              fieldError.textContent = err.msg;
+        toStep2Btn.addEventListener("click", () => {
+          const requiredFields = [
+            { id: "companyName", msg: "Company name is required" },
+            { id: "companyEmail", msg: "Company email is required" },
+            { id: "subdomain", msg: "Subdomain is required" },
+          ];
+          let valid = true;
+          requiredFields.forEach(f => {
+            const input = document.getElementById(f.id);
+            const errorField = document.getElementById("error-" + f.id);
+            if (!input.value.trim()) {
+              errorField.textContent = f.msg;
+              valid = false;
             } else {
-              console.warn("⚠️ Unknown field from backend:", err.path);
+              errorField.textContent = "";
             }
           });
+          if (valid) {
+            step1.style.display = "none";
+            step2.style.display = "block";
+          }
+        });
 
-          alertBox.className = "alert alert-danger text-center mt-3";
-          alertBox.textContent = "Please fix the errors below.";
-          alertBox.style.display = "block";
-          return;
-        }
+        backBtn.addEventListener("click", () => {
+          step2.style.display = "none";
+          step1.style.display = "block";
+        });
 
-        // 🔹 Handle Successful Registration
-        if (data.success) {
-          alertBox.className = "alert alert-success text-center mt-3";
-          alertBox.textContent = data.message;
-          alertBox.style.display = "block";
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          alertBox.style.display = "none";
+          document.querySelectorAll(".error-text").forEach(el => (el.textContent = ""));
+          const formData = new FormData(form);
 
-          // Redirect بعد فترة قصيرة
-          setTimeout(() => {
-            window.location.href = data.redirect || "/auth/login";
-          }, 1500);
-          return;
-        }
+          try {
+            const res = await fetch("/auth/register-company", {
+              method: "POST",
+              body: formData,
+            });
+            const data = await res.json();
 
-        // 🔹 Unexpected Response
-        alertBox.className = "alert alert-warning text-center mt-3";
-        alertBox.textContent = "Unexpected response from server.";
-        alertBox.style.display = "block";
+            if (data.errors && Array.isArray(data.errors)) {
+              data.errors.forEach(err => {
+                const safePath = err.path.replace(/\./g, '').replace(/\[/g,'').replace(/\]/g,'').replace(/[^a-zA-Z0-9]/g,'');
+                const fieldId = "error-" + safePath;
+                const fieldError = document.getElementById(fieldId);
+                if (fieldError) fieldError.textContent = err.msg;
+              });
+              alertBox.className = "alert alert-danger text-center mt-3";
+              alertBox.textContent = "Please fix the errors below.";
+              alertBox.style.display = "block";
+              return;
+            }
 
-      } catch (error) {
-        console.error("❌ Fetch error:", error);
-        alertBox.className = "alert alert-danger text-center mt-3";
-        alertBox.textContent = "Something went wrong. Please try again.";
-        alertBox.style.display = "block";
-      }
-    });
-  });
-</script>
+            if (data.success) {
+              alertBox.className = "alert alert-success text-center mt-3";
+              alertBox.textContent = data.message;
+              alertBox.style.display = "block";
+              setTimeout(() => { window.location.href = data.redirect || "/auth/login"; }, 1500);
+              return;
+            }
 
-
-
+            alertBox.className = "alert alert-warning text-center mt-3";
+            alertBox.textContent = "Unexpected response from server.";
+            alertBox.style.display = "block";
+          } catch (error) {
+            console.error("❌ Fetch error:", error);
+            alertBox.className = "alert alert-danger text-center mt-3";
+            alertBox.textContent = "Something went wrong. Please try again.";
+            alertBox.style.display = "block";
+          }
+        });
+      });
+    </script>
 
     <style>
-      .error-text {
-        font-size: 0.85rem;
-      }
-      .w-45 {
-        width: 48%;
-      }
-      .form-control:focus {
-        box-shadow: none;
-      }
+      .error-text { font-size: 0.85rem; }
+      .w-45 { width: 48%; }
+      .form-control:focus { box-shadow: none; }
     </style>
   </body>
 </html>
