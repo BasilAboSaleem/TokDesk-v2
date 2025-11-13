@@ -1,136 +1,110 @@
 <!DOCTYPE html>
-<html
-  lang="en"
-  class="dark-style customizer-hide"
-  dir="ltr"
-  data-theme="dark"
-  data-assets-path="dashboard/assets/"
-  data-template="vertical-menu-template-free"
->
+<html>
   <%- include('../../partials/head.ejs') %>
 
-  <body style="background-color: #121212;">
-    <div class="authentication-wrapper authentication-basic min-vh-100 d-flex align-items-center justify-content-center">
-      <div class="authentication-inner w-100" style="max-width: 400px;">
-        <div class="card shadow-lg" style="background-color: #1e1e1e; color: #ffffff;">
-          <div class="app-brand justify-content-center mb-4">
-            <a href="/" class="app-brand-link gap-2 text-white">
-              <span class="app-brand-text demo fw-bolder">TokDesk</span>
-            </a>
+  <body class="bmd-layout-container bmd-drawer-f-l avam-container">
+    <main class="bmd-layout-content">
+      <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
+        <div class="card shadow-lg p-4" style="max-width: 450px; width:100%;">
+          <!-- Brand / Logo -->
+          <div class="text-center mb-4">
+            <img src="/dashboard/svg/logo.svg" alt="Logo" height="130" width="300">
           </div>
 
           <h4 class="mb-2 text-center">Welcome back 👋</h4>
           <p class="mb-4 text-center">Sign in to your account</p>
 
           <!-- Login Form -->
-          <form id="loginForm" class="mb-3" action="/auth/login" method="POST">
+          <form id="loginForm" action="/auth/login" method="POST">
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control bg-dark text-white border-secondary" id="email" name="email" required />
+              <input type="email" class="form-control bg-light text-dark" id="email" name="email" required>
               <small class="text-danger error-text" id="error-email"></small>
             </div>
 
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
-              <input type="password" class="form-control bg-dark text-white border-secondary" id="password" name="password" required />
+              <input type="password" class="form-control bg-light text-dark" id="password" name="password" required>
               <small class="text-danger error-text" id="error-password"></small>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Login</button>
           </form>
 
-          <p class="text-center mt-3 text-white">
+          <p class="text-center mt-3">
             <span>Don't have an account?</span>
-            <a href="/auth/register-company" class="fw-bold text-white">Register here</a>
+            <a href="/auth/register-company" class="fw-bold">Register here</a>
           </p>
 
           <div id="alertBox" class="alert text-center mt-3" style="display:none;"></div>
         </div>
       </div>
-    </div>
+    </main>
 
     <%- include('../../partials/scripts.ejs') %>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("loginForm");
-  const alertBox = document.getElementById("alertBox");
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("loginForm");
+        const alertBox = document.getElementById("alertBox");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    alertBox.style.display = "none";
-    document.querySelectorAll(".error-text").forEach(el => (el.textContent = ""));
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          alertBox.style.display = "none";
+          document.querySelectorAll(".error-text").forEach(el => (el.textContent = ""));
 
-    try {
-      // إرسال البيانات كـ JSON
-      const res = await fetch("/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: form.email.value.trim(),
-          password: form.password.value
-        }),
-      });
+          const payload = {
+            email: form.email.value.trim(),
+            password: form.password.value
+          };
 
-      const data = await res.json();
+          try {
+            const res = await fetch("/auth/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload)
+            });
 
-      // ===== التعامل مع أخطاء الفاليديتور =====
-      if (data.errors && Array.isArray(data.errors)) {
-        data.errors.forEach(err => {
-          const path = err.path || "server";
-          const safePath = path.replace(/\./g, '')
-                               .replace(/\[/g, '')
-                               .replace(/\]/g, '')
-                               .replace(/[^a-zA-Z0-9]/g, '');
-          const fieldError = document.getElementById("error-" + safePath);
-          if (fieldError) {
-            fieldError.textContent = err.msg;
-          } else {
-            // عرض الأخطاء العامة في alertBox
+            const data = await res.json();
+
+            // ===== Field-specific validation errors =====
+            if (data.errors && Array.isArray(data.errors)) {
+              data.errors.forEach(err => {
+                const safePath = err.path.replace(/\./g, '').replace(/\[/g,'').replace(/\]/g,'').replace(/[^a-zA-Z0-9]/g,'');
+                const fieldError = document.getElementById("error-" + safePath);
+                if (fieldError) fieldError.textContent = err.msg;
+              });
+              alertBox.className = "alert alert-danger text-center mt-3";
+              alertBox.textContent = "Please fix the errors below.";
+              alertBox.style.display = "block";
+              return;
+            }
+
+            // ===== Successful login =====
+            if (data.success) {
+              alertBox.className = "alert alert-success text-center mt-3";
+              alertBox.textContent = data.message;
+              alertBox.style.display = "block";
+              setTimeout(() => {
+                window.location.href = data.redirect || "/dashboard";
+              }, 1000);
+              return;
+            }
+
+            // ===== Unexpected response =====
+            alertBox.className = "alert alert-warning text-center mt-3";
+            alertBox.textContent = "Unexpected response from server.";
+            alertBox.style.display = "block";
+
+          } catch (error) {
+            console.error("❌ Fetch error:", error);
             alertBox.className = "alert alert-danger text-center mt-3";
-            alertBox.textContent = err.msg;
+            alertBox.textContent = "Something went wrong. Please try again.";
             alertBox.style.display = "block";
           }
         });
-
-        // رسالة عامة إذا كان هناك أكثر من خطأ
-        if (data.errors.length > 1) {
-          alertBox.className = "alert alert-danger text-center mt-3";
-          alertBox.textContent = "Please fix the errors below.";
-          alertBox.style.display = "block";
-        }
-        return;
-      }
-
-      // ===== التعامل مع تسجيل الدخول الناجح =====
-      if (data.success) {
-        alertBox.className = "alert alert-success text-center mt-3";
-        alertBox.textContent = data.message;
-        alertBox.style.display = "block";
-
-        setTimeout(() => {
-          window.location.href = data.redirect || "/dashboard";
-        }, 1000);
-        return;
-      }
-
-      // ===== حالة الاستجابة غير المتوقعة =====
-      alertBox.className = "alert alert-warning text-center mt-3";
-      alertBox.textContent = "Unexpected response from server.";
-      alertBox.style.display = "block";
-
-    } catch (error) {
-      console.error("❌ Fetch error:", error);
-      alertBox.className = "alert alert-danger text-center mt-3";
-      alertBox.textContent = "Something went wrong. Please try again.";
-      alertBox.style.display = "block";
-    }
-  });
-});
-</script>
-
-
->
+      });
+    </script>
 
     <style>
       .error-text { font-size: 0.85rem; }
