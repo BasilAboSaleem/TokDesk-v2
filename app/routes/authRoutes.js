@@ -9,6 +9,6 @@ router.get('/register', authController.renderRegisterCompanyPage);
 router.post('/register-company', upload.single('logo'), registerCompanyValidator, authController.registerCompany);
 
 router.get('/login', authController.renderLoginPage);
-router.post('/login', loginValidator, authController.login);
+router.post('/login', loginValidator, authController.login); 
 
 module.exports = router;    
