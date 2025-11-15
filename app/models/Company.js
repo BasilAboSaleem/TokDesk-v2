@@ -52,14 +52,10 @@ const companySchema = new mongoose.Schema({
     default: 'light'
   },
 
-  isActive: {
-    type: Boolean,
-    default: false
-  },
-
-  isRejected: {
-    type: Boolean,
-    default: false
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending'
   },
 
   rejectionReason: {
