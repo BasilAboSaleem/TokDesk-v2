@@ -47,12 +47,6 @@ const userSchema = new mongoose.Schema({
     default: 'en'
   },
 
-  theme: {
-    type: String,
-    enum: ['light', 'dark'],
-    default: 'light'
-  },
-
   status: {
     type: String,
     enum: ['online', 'offline', 'busy', 'away', 'invisible'],

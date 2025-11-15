@@ -46,11 +46,6 @@ const companySchema = new mongoose.Schema({
     default: 'en'
   },
 
-  defaultTheme: {
-    type: String,
-    enum: ['light', 'dark'],
-    default: 'light'
-  },
 
   status: {
     type: String,
