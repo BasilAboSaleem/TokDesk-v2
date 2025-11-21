@@ -22,7 +22,7 @@ async function createSuperAdmin() {
     if (existingSA) {
       console.log("⚠ Super Admin already exists. Cannot create another one.");
       process.exit(0);
-    }
+    } 
 
     //  2. create super admin (first and only one)
     const user = new User({
@@ -45,5 +45,6 @@ async function createSuperAdmin() {
     process.exit(1);
   }
 }
-
+// Minor Git activity test to keep GitHub streak
+console.log("⚡ Minor Git activity test");
 createSuperAdmin();
