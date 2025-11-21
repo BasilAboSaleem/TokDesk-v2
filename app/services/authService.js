@@ -7,10 +7,12 @@ const jwt = require('jsonwebtoken');
 
 class registerCompany {
   async registerCompany(data, file) {
+  console.log("💡 registerCompany service called"); // <-- trivial change
+
     const { company, admin } = data;  
     const { name: companyName, email: companyEmail, subdomain } = company;
     const { name: adminName, email: adminEmail, password: adminPassword } = admin;
-
+ 
     // validations 
     if (await CompanyRepo.findByEmail(companyEmail)) {
       throw new Error('Company email already exists');  
