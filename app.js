@@ -89,6 +89,7 @@ app.use(async (req, res, next) => {
 const landingRouter = require("./app/routes/landing");
 const authRoutes = require("./app/routes/authRoutes");
 const dashboardRoutes = require("./app/routes/dashboardRoutes");
+const superAdminRoutes = require("./app/routes/superAdminRoutes");
 /*
 const userRoutes = require("./app/routes/userRoutes");
 const companyRoutes = require("./app/routes/companyRoutes");
@@ -124,6 +125,7 @@ app.use((req, res, next) => {
 
 // Protected routes (authMiddleware + authorize can be used inside these routes)
 app.use("/dashboard", dashboardRoutes);
+app.use("/", superAdminRoutes);
 /*
 app.use("/api/users", userRoutes);
 app.use("/api/companies", companyRoutes);
