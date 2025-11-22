@@ -1,0 +1,18 @@
+{
+  "pending_companies_title": "Pending Companies",
+  "pending_companies_count": "Total Pending Companies",
+  "breadcrumb_dashboard": "Dashboard",
+  "breadcrumb_companies": "Companies",
+
+  "table_logo": "Logo",
+  "table_company_name": "Company Name",
+  "table_email": "Company Email",
+  "table_admin": "Admin",
+  "table_created_at": "Created At",
+  "table_actions": "Actions",
+
+  "approve": "Approve",
+  "reject": "Reject",
+
+  "empty_state": "No pending companies found"
+}
