@@ -1,4 +1,6 @@
 {
+  "superAdmin": {
+    "companies": {
   "pending_companies_title": "Pending Companies",
   "pending_companies_count": "Total Pending Companies",
   "breadcrumb_dashboard": "Dashboard",
@@ -15,4 +17,6 @@
   "reject": "Reject",
 
   "empty_state": "No pending companies found"
+  }
+  }
 }

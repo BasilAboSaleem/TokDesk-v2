@@ -117,6 +117,7 @@ app.use((req, res, next) => {
         company: req.user.company,
       }
     : null;
+    res.locals.ROLES = require('./app/constants/roles');
   next();
 });
 

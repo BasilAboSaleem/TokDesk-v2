@@ -1,131 +1,175 @@
-<%- include('../partials/header') %>
+<!doctype html>
+<html lang="<%= locale %>" dir="<%= dir %>">
 
-<div class="container-xxl flex-grow-1 container-p-y">
+  <%- include('../../partials/head.ejs') %>
 
-  <!-- Title + Breadcrumb -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h4 class="fw-bold mb-0">
-      <%= t('pending_companies_title') %>
-    </h4>
+  <body class="">
 
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item">
-          <a href="/superadmin/dashboard"><%= t('breadcrumb_dashboard') %></a>
-        </li>
-        <li class="breadcrumb-item">
-          <a href="/superadmin/companies"><%= t('breadcrumb_companies') %></a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-          <%= t('pending_companies_title') %>
-        </li>
-      </ol>
-    </nav>
-  </div>
+    <div class="bmd-layout-container bmd-drawer-f-l avam-container animated bmd-drawer-in">
 
-  <!-- Summary Card -->
-  <div class="row mb-4">
-    <div class="col-md-4 col-sm-6">
-      <div class="card shadow-sm">
-        <div class="card-body d-flex align-items-center">
-          <div class="flex-grow-1">
-            <h5 class="card-title mb-1"><%= t('pending_companies_count') %></h5>
-            <p class="mb-0 text-muted fs-6"><%= companies.length %></p>
-          </div>
-          <span class="badge bg-label-primary fs-4 p-3">
-            <i class="bx bx-time"></i>
-          </span>
-        </div>
+      <!-- Header -->
+      <%- include('../../partials/header.ejs') %>
+
+      <!-- Sidebar -->
+      <div id="dw-s1" class="bmd-layout-drawer bg-faded">
+        <%- include('../../partials/sidebar.ejs') %>
       </div>
-    </div>
-  </div>
 
-  <!-- Companies Table -->
-  <div class="card shadow-sm">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <h5 class="mb-0"><%= t('pending_companies_title') %></h5>
-    </div>
+      <!-- Main Content (structure الأصلية الصحيحة بدون أي تعديل) -->
+      <div class="bmd-layout-content">
 
-    <div class="table-responsive text-nowrap">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th><%= t('table_logo') %></th>
-            <th><%= t('table_company_name') %></th>
-            <th><%= t('table_email') %></th>
-            <th><%= t('table_admin') %></th>
-            <th><%= t('table_created_at') %></th>
-            <th class="text-center"><%= t('table_actions') %></th>
-          </tr>
-        </thead>
+        <div class="container-fluid my-4">
 
-        <tbody>
-          <% if (companies.length === 0) { %>
-            <tr>
-              <td colspan="6" class="text-center py-5">
-                <div class="text-muted fs-5">
-                  <i class="bx bx-time fs-1 d-block mb-2"></i>
-                  <%= t('empty_state') %>
-                </div>
-              </td>
-            </tr>
-          <% } else { %>
+          <!-- Title + Breadcrumb -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold mb-0">
+              <%= t('dashboard:superAdmin.companies.pending_companies_title') %>
+            </h4>
 
-            <% companies.forEach(company => { %>
-              <tr>
-                <!-- Logo / Avatar -->
-                <td>
-                  <% if (company.logoUrl) { %>
-                    <img src="<%= company.logoUrl %>" alt="logo" class="rounded-circle" width="40" height="40">
-                  <% } else { %>
-                    <div class="avatar avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
-                      <%= company.name.charAt(0).toUpperCase() %>
-                    </div>
-                  <% } %>
-                </td>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                  <a href="/superadmin/dashboard">
+                    <%= t('dashboard:superAdmin.companies.breadcrumb_dashboard') %>
+                  </a>
+                </li>
+                <li class="breadcrumb-item">
+                  <a href="/superadmin/companies">
+                    <%= t('dashboard:superAdmin.companies.breadcrumb_companies') %>
+                  </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  <%= t('dashboard:superAdmin.companies.pending_companies_title') %>
+                </li>
+              </ol>
+            </nav>
+          </div>
 
-                <!-- Company Name + Subdomain -->
-                <td>
-                  <strong><%= company.name %></strong><br>
-                  <small class="text-muted"><%= company.subdomain %>.tokdesk.com</small>
-                </td>
-
-                <td><%= company.email %></td>
-
-                <!-- Admin -->
-                <td>
-                  <div class="d-flex align-items-center">
-                    <div class="avatar avatar-xs bg-info text-white rounded-circle me-2 d-flex align-items-center justify-content-center">
-                      <i class="bx bx-user"></i>
-                    </div>
-                    <div>
-                      <strong><%= company.adminName %></strong><br>
-                      <small class="text-muted"><%= company.adminEmail %></small>
-                    </div>
+          <!-- Summary Card -->
+          <div class="row mb-4">
+            <div class="col-md-4 col-sm-6">
+              <div class="card shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                  <div class="flex-grow-1">
+                    <h5 class="card-title mb-1">
+                      <%= t('dashboard:superAdmin.companies.pending_companies_count') %>
+                    </h5>
+                    <p class="mb-0 text-muted fs-6"><%= companies.length %></p>
                   </div>
-                </td>
+                  <span class="badge bg-label-primary fs-4 p-3">
+                    <i class="bx bx-time"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                <td><%= company.createdAt.toLocaleDateString(lang) %></td>
+          <!-- Companies Table -->
+          <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">
+                <%= t('dashboard:superAdmin.companies.pending_companies_title') %>
+              </h5>
+            </div>
 
-                <!-- Actions -->
-                <td class="text-center">
-                  <a href="/superadmin/companies/<%= company._id %>/approve" class="btn btn-success btn-sm me-1">
-                    <i class="bx bx-check"></i> <%= t('approve') %>
-                  </a>
+            <div class="table-responsive text-nowrap">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th><%= t('dashboard:superAdmin.companies.table_logo') %></th>
+                    <th><%= t('dashboard:superAdmin.companies.table_company_name') %></th>
+                    <th><%= t('dashboard:superAdmin.companies.table_email') %></th>
+                    <th><%= t('dashboard:superAdmin.companies.table_admin') %></th>
+                    <th><%= t('dashboard:superAdmin.companies.table_created_at') %></th>
+                    <th class="text-center"><%= t('dashboard:superAdmin.companies.table_actions') %></th>
+                  </tr>
+                </thead>
 
-                  <a href="/superadmin/companies/<%= company._id %>/reject" class="btn btn-danger btn-sm">
-                    <i class="bx bx-x"></i> <%= t('reject') %>
-                  </a>
-                </td>
-              </tr>
-            <% }) %>
+                <tbody>
+                  <% if (companies.length === 0) { %>
+                    <tr>
+                      <td colspan="6" class="text-center py-5">
+                        <div class="text-muted fs-5">
+                          <i class="bx bx-time fs-1 d-block mb-2"></i>
+                          <%= t('dashboard:superAdmin.companies.empty_state') %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% } else { %>
 
-          <% } %>
-        </tbody>
+                    <% companies.forEach(company => { %>
+                      <tr>
 
-      </table>
-    </div>
-  </div>
-</div>
+                        <!-- Logo -->
+                        <td style="width:72px;">
+                          <% if (company.logoUrl) { %>
+                            <img src="<%= company.logoUrl %>" alt="logo" class="rounded-circle" width="40" height="40">
+                          <% } else { %>
+                            <div class="avatar avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                              <%= company.name.charAt(0).toUpperCase() %>
+                            </div>
+                          <% } %>
+                        </td>
 
+                        <!-- Name + Subdomain -->
+                        <td>
+                          <strong><%= company.name %></strong>
+                          <br>
+                          <small class="text-muted"><%= company.subdomain %>.tokdesk.com</small>
+                        </td>
 
+                        <!-- Email -->
+                        <td><%= company.email %></td>
+
+                        <!-- Admin -->
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <div class="avatar avatar-xs bg-info text-white rounded-circle me-2 d-flex align-items-center justify-content-center" style="width:32px; height:32px;">
+                              <i class="bx bx-user"></i>
+                            </div>
+                            <div>
+                              <strong><%= company.adminName %></strong><br>
+                              <small class="text-muted"><%= company.adminEmail %></small>
+                            </div>
+                          </div>
+                        </td>
+
+                        <!-- Created At -->
+                        <td>
+                          <%= company.createdAt ? company.createdAt.toLocaleDateString(locale) : '' %>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-center">
+                          <a href="/superadmin/companies/<%= company._id %>/approve" class="btn btn-success btn-sm me-1">
+                            <i class="bx bx-check"></i>
+                            <%= t('dashboard:superAdmin.companies.approve') %>
+                          </a>
+
+                          <a href="/superadmin/companies/<%= company._id %>/reject" class="btn btn-danger btn-sm">
+                            <i class="bx bx-x"></i>
+                            <%= t('dashboard:superAdmin.companies.reject') %>
+                          </a>
+                        </td>
+
+                      </tr>
+                    <% }) %>
+
+                  <% } %>
+
+                </tbody>
+
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div> <!-- END content -->
+
+    </div> <!-- END layout -->
+
+    <%- include('../../partials/scripts.ejs') %>
+  </body>
+</html>
