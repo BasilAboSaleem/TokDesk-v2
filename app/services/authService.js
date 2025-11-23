@@ -7,21 +7,31 @@ const jwt = require('jsonwebtoken');
 
 class registerCompany {
   async registerCompany(data, file) {
-  console.log("💡 registerCompany service called"); // <-- trivial change
-
+    console.log("called servec");
     const { company, admin } = data;  
     const { name: companyName, email: companyEmail, subdomain } = company;
     const { name: adminName, email: adminEmail, password: adminPassword } = admin;
- 
-    // validations 
+
+    const errors = [];
+
     if (await CompanyRepo.findByEmail(companyEmail)) {
-      throw new Error('Company email already exists');  
+      console.log("Company email already exists");
+      errors.push({ msg: 'Company email already exists', path: 'companyEmail' });
     }
     if (await CompanyRepo.findBySubdomain(subdomain)) {
-      throw new Error('Subdomain already exists'); 
+      console.log("Subdomain already exists");
+      errors.push({ msg: 'Subdomain already exists', path: 'subdomain' });
     }
-  
-    // upload logo to Cloudinary
+
+    if (errors.length > 0) {
+      // throw validation error
+      const error = new Error('Validation failed');
+      error.fieldErrors = errors;
+      console.log("Validation errors:", errors);
+      throw error;
+    }
+
+    // upload logo
     let logoUrl = '';
     if (file) {
       const result = await cloudinary.uploader.upload(file.path, { folder: 'TokDesk2/companies' });
@@ -37,6 +47,7 @@ class registerCompany {
       subdomain,
       logo: logoUrl 
     });
+    console.log("Created company:", createdCompany);
 
     // create admin
     const createdAdmin = await UserRepo.create({
@@ -46,6 +57,7 @@ class registerCompany {
       role: ROLES.ADMIN,
       company: createdCompany._id
     });
+    console.log("Created admin:", createdAdmin);
 
     return { company: createdCompany, admin: createdAdmin };
   }

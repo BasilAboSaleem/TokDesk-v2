@@ -5,13 +5,20 @@ exports.renderRegisterCompanyPage = (req, res) => {
 };
 exports.registerCompany = async (req, res) => {
   try {
+    console.log(req.body);
     const result = await registerCompany.registerCompany(req.body, req.file);
-return res.status(200).json({ 
+
+    return res.status(200).json({ 
       success: true, 
       message: "Company and Admin registered successfully!",
       redirect: "/auth/login" 
     });
- } catch (err) {
+
+  } catch (err) {
+    if (err.fieldErrors) {
+      return res.status(400).json({ errors: err.fieldErrors });
+    }
+
     res.status(400).json({
       errors: [
         { msg: err.message, path: 'server' }
@@ -19,6 +26,8 @@ return res.status(200).json({
     });
   }
 };
+
+
 
 exports.renderLoginPage = (req, res) => {
   res.render('dashboard/pages/auth/login'); 
