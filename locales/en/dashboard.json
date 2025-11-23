@@ -2,6 +2,7 @@
   "superAdmin": {
     "companies": {
   "pending_companies_title": "Pending Companies",
+  "pending_companies_subtitle": "List of companies awaiting approval",
   "pending_companies_count": "Total Pending Companies",
   "breadcrumb_dashboard": "Dashboard",
   "breadcrumb_companies": "Companies",
