@@ -34,15 +34,49 @@ exports.renderLoginPage = (req, res) => {
 }
 exports.login = async (req, res) => {
   try {
-    const token = await loginService.login(req.body);
-    res.cookie("token", token, { httpOnly: true, maxAge: 24*60*60*1000 });
+    const { email, password } = req.body;
+    const result = await loginService.login({ email, password });
+    // if multiple companies, return the list for selection
+    if (result.userCompanies) {
+      return res.status(200).json({
+        success: true,
+        message: "Select a company to continue",
+        userCompanies: result.userCompanies
+      });
+    }
+
+    // if single company, set cookie and return token
+    res.cookie("token", result.token, { httpOnly: true, maxAge: 24*60*60*1000 });
     res.status(200).json({
       success: true,
       message: "Login successful!",
-      token,
+      token: result.token,
       redirect: "/dashboard"
-
     });
+
+  } catch (err) {
+    res.status(400).json({
+      errors: [
+        { msg: err.message, path: 'server' }
+      ]
+    });
+  }
+};
+
+// Confirm company selection and finalize login
+exports.confirmCompany = async (req, res) => {
+  try {
+    const { email, password, companyId } = req.body;
+    const result = await loginService.confirmCompany({ email, password, companyId });
+
+    res.cookie("token", result.token, { httpOnly: true, maxAge: 24*60*60*1000 });
+    res.status(200).json({
+      success: true,
+      message: "Login successful!",
+      token: result.token,
+      redirect: "/dashboard"
+    });
+
   } catch (err) {
     res.status(400).json({
       errors: [
