@@ -1,5 +1,6 @@
 const CompanyRepo = require('../repositories/companyRepository');
 const UserRepo = require('../repositories/userRepository');
+const UserCompanyRepo = require('../repositories/UserCompanyRepo');
 const ROLES = require('../constants/roles');
 const cloudinary = require('cloudinary').v2;
 const jwt = require('jsonwebtoken');
@@ -54,12 +55,22 @@ class registerCompany {
       name: adminName,
       email: adminEmail,
       password: adminPassword,
-      role: ROLES.ADMIN,
-      company: createdCompany._id
+      preferredCompany: createdCompany._id
     });
     console.log("Created admin:", createdAdmin);
 
-    return { company: createdCompany, admin: createdAdmin };
+    // create UserCompany link with COMPANY_ADMIN role
+    const createdUserCompany = await UserCompanyRepo.create({
+    user: createdAdmin._id,
+    company: createdCompany._id,
+    role: ROLES.ADMIN,  
+    status: 'active',
+    lastAccessAt: new Date()
+});
+    console.log("Created UserCompany link:", createdUserCompany);
+    
+
+    return { company: createdCompany, admin: createdAdmin, userCompany: createdUserCompany  };
   }
 }
 
