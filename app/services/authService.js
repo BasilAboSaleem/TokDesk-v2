@@ -78,19 +78,60 @@ class login {
   async login(data) {
     const { email, password } = data;
 
-    // validations
+    // ===== Validation: check if user exists =====
     const user = await UserRepo.findByEmail(email);
     if (!user) {
       throw new Error('User not found');
     }
+
+    // ===== Validation: compare password =====
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       throw new Error('Invalid password');
     }
 
-    // generate token
-    const token = user.generateAuthToken();
-    return  token ;
+    // ===== Fetch all companies linked to the user =====
+    const userCompanies = await UserCompanyRepo.findAllByUser(user._id);
+
+    // ===== If no companies linked, throw error =====
+    if (!userCompanies || userCompanies.length === 0) {
+      throw new Error('User is not associated with any company');
+    }
+
+    // ===== If multiple companies, return list for frontend selection =====
+    if (userCompanies.length > 1) {
+      return { userCompanies };
+    }
+
+    // ===== If single company, generate token with company context =====
+    if (userCompanies.length === 1) {
+      const selectedCompany = userCompanies[0];
+      const token = user.generateAuthToken({
+        companyId: selectedCompany.company.toString(),
+        role: selectedCompany.role
+      });
+      return { token };
+    }
+  
+  }
+
+  // Confirm selected company and generate final token
+  async confirmCompany(userId, companyId) {
+    // ===== Verify that the selected company is linked to the user =====
+    const userCompany = await UserCompanyRepo.findByUserAndCompany(userId, companyId);
+    if (!userCompany) throw new Error('Selected company is not linked to the user');
+
+    // ===== Fetch user data =====
+    const user = await UserRepo.findById(userId);
+    if (!user) throw new Error('User not found');
+
+    // ===== Generate final JWT with company and role context =====
+    const token = user.generateAuthToken({
+      companyId: userCompany.company.toString(),
+      role: userCompany.role
+    });
+
+    return { token };
   }
 }
 
