@@ -80,15 +80,20 @@ class login {
 
     // ===== Validation: check if user exists =====
     const user = await UserRepo.findByEmail(email);
-    if (!user) {
-      throw new Error('User not found');
-    }
+   if (!user) {
+  const error = new Error('User not found');
+  error.field = 'email';
+  throw error;
+}
 
     // ===== Validation: compare password =====
     const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      throw new Error('Invalid password');
-    }
+   if (!isMatch) {
+  const error = new Error('Invalid password');
+  error.field = 'password';
+  throw error;
+}
+
 
     // ===== Fetch all companies linked to the user =====
     const userCompanies = await UserCompanyRepo.findAllByUser(user._id);

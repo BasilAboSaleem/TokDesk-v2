@@ -55,12 +55,12 @@ exports.login = async (req, res) => {
     });
 
   } catch (err) {
-    res.status(400).json({
-      errors: [
-        { msg: err.message, path: 'server' }
-      ]
-    });
-  }
+  res.status(400).json({
+    errors: [
+      { msg: err.message, path: err.field || 'server' }
+    ]
+  });
+}
 };
 
 // Confirm company selection and finalize login
