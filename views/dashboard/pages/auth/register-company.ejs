@@ -95,58 +95,6 @@
     <%- include('../../partials/scripts.ejs') %>
 
 <script>
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  alertBox.style.display = "none";
-  document.querySelectorAll(".error-text").forEach(el => (el.textContent = ""));
-  const formData = new FormData(form);
-
-  try {
-    const res = await fetch("/auth/register-company", {
-      method: "POST",
-      body: formData,
-    });
-    const data = await res.json();
-
-    // معالجة الأخطاء لكل حقل
-    if (data.errors && Array.isArray(data.errors)) {
-      data.errors.forEach(err => {
-        // استخدم err.path مباشرة ليطابق الـid في الفورم
-        const fieldError = document.getElementById("error-" + err.path);
-        if (fieldError) fieldError.textContent = err.msg;
-      });
-
-      if (data.errors.length > 1) {
-        alertBox.className = "alert alert-danger text-center mt-3";
-        alertBox.textContent = "Please fix the errors below.";
-        alertBox.style.display = "block";
-      }
-      return;
-    }
-
-    // نجاح التسجيل
-    if (data.success) {
-      alertBox.className = "alert alert-success text-center mt-3";
-      alertBox.textContent = data.message;
-      alertBox.style.display = "block";
-      setTimeout(() => {
-        window.location.href = data.redirect || "/auth/login";
-      }, 1500);
-      return;
-    }
-
-    // استجابة غير متوقعة
-    alertBox.className = "alert alert-warning text-center mt-3";
-    alertBox.textContent = "Unexpected response from server.";
-    alertBox.style.display = "block";
-
-  } catch (error) {
-    console.error("❌ Fetch error:", error);
-    alertBox.className = "alert alert-danger text-center mt-3";
-    alertBox.textContent = "Something went wrong. Please try again.";
-    alertBox.style.display = "block";
-  }
-});
   const step1 = document.getElementById("step1");
   const step2 = document.getElementById("step2");
   const toStep2Btn = document.getElementById("toStep2");
@@ -201,7 +149,6 @@ form.addEventListener("submit", async (e) => {
       // معالجة الأخطاء لكل حقل
       if (data.errors && Array.isArray(data.errors)) {
         data.errors.forEach(err => {
-          // Use last part of path to match the field id
           const pathParts = err.path.split(/[\.\[\]]/).filter(Boolean);
           const lastPart = pathParts[pathParts.length - 1];
           const fieldError = document.getElementById("error-" + lastPart);
@@ -239,9 +186,8 @@ form.addEventListener("submit", async (e) => {
       alertBox.style.display = "block";
     }
   });
-
-
 </script>
+
 
 <style>
   .error-text { font-size: 0.85rem; }
