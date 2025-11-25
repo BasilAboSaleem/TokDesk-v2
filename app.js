@@ -107,17 +107,22 @@ app.use("/auth", authRoutes);
 app.use(authMiddleware);
 
 // 🔹 Global User Injection: make user available in all views
+const ROLES = require("./app/constants/roles");
 app.use((req, res, next) => {
-  res.locals.user = req.user
-    ? {
-        id: req.user._id,
-        name: req.user.name,
-        email: req.user.email,
-        role: req.user.role,
-        company: req.user.company,
-      }
-    : null;
-    res.locals.ROLES = require('./app/constants/roles');
+  if (req.user) {
+    res.locals.user = {
+      id: req.user._id || req.user.id,
+      name: req.user.name || null,
+      email: req.user.email || null,
+      role: req.user.role || null,
+      companyId: req.user.companyId || null,
+      companyRole: req.user.companyRole || null,
+    };
+  } else {
+    res.locals.user = null;
+  }
+
+  res.locals.ROLES = ROLES; // ✅ تمريره لجميع الـ EJS
   next();
 });
 
