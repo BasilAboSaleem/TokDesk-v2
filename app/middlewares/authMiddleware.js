@@ -1,64 +1,82 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const UserCompany = require("../models/UserCompany");
+const ROLES = require("../constants/roles");
 
-async function authMiddleware(req, res, next) {
+module.exports = async function (req, res, next) {
   try {
-    // get token from cookie or header
-    const token =
-      req.cookies.token || req.headers.authorization?.split(' ')[1];
+    const authHeader = req.headers.authorization || req.cookies.token;
 
-    if (!token) return handleUnauthorized(req, res);
-
-    // expected token structure: JWT with user id, companyId, role
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (!decoded?.id) return handleUnauthorized(req, res);
-
-    // prepare user data from decoded
-    let userData = {
-      id: decoded.id,
-      companyId: decoded.companyId || null, 
-      role: decoded.role || null,             
-      name: decoded.name || null,           
-      email: decoded.email || null         
-    };
-
-    // ===== Fallback: fetch full user data from database if important fields are missing =====
-    if (!userData.name || !userData.email) {
-      const user = await User.findById(decoded.id).select('_id name email status');
-      if (!user) return handleUnauthorized(req, res);
-
-      userData = {
-        ...userData,
-        name: user.name,
-        email: user.email,
-        status: user.status
-      };
+    if (!authHeader) {
+      return handleUnauthorized(req, res);
     }
 
-    // attach user to request
-    req.user = userData;
-    next();
+    const token = authHeader.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : authHeader;
 
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // 1) Fetch the basic user
+    const user = await User.findById(decoded.id);
+    if (!user) return handleUnauthorized(req, res);
+
+    // 2) Super Admin → not linked to any company
+    if (decoded.role === ROLES.SUPER_ADMIN || user.role === ROLES.SUPER_ADMIN) {
+      req.user = {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: ROLES.SUPER_ADMIN,
+        companyId: null,
+        companyRole: "super_admin",
+      };
+      return next();
+    }
+
+    // 3) Regular user → must have a selected company
+    if (!decoded.companyId) {
+      return handleUnauthorized(req, res, "No company selected. Please choose a company before accessing the dashboard.");
+    }
+
+    // 4) Fetch user-company relation
+    const userCompany = await UserCompany.findOne({
+      user: user._id,
+      company: decoded.companyId,
+      deletedAt: null,
+    });
+
+    if (!userCompany) {
+      return handleUnauthorized(req, res, "You are not part of this company");
+    }
+
+    // 5) Store user data for downstream use
+    req.user = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: decoded.role || user.role,
+      companyId: decoded.companyId,
+      companyRole: userCompany.role,
+    };
+
+    next();
   } catch (err) {
-    console.error('Auth middleware error:', err);
+    console.error("Auth middleware error:", err);
     return handleUnauthorized(req, res);
   }
-}
+};
 
-// ===== Handle unauthorized user =====
-function handleUnauthorized(req, res) {
+function handleUnauthorized(req, res, message = "Unauthorized") {
   const isApi =
     req.xhr ||
-    req.headers.accept?.includes('application/json') ||
-    req.originalUrl.startsWith('/api');
+    req.headers.accept?.includes("application/json") ||
+    req.originalUrl.startsWith("/api");
 
   if (isApi) {
-    return res.status(401).json({
-      message: 'Unauthorized: token invalid or expired',
-    });
+    return res.status(401).json({ message });
   }
-// for page requests, redirect to login
-  return res.redirect('/auth/login');
-}
 
-module.exports = authMiddleware;
+ 
+  return res.redirect("/auth/login");
+}
