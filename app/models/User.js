@@ -79,15 +79,20 @@ userSchema.methods.comparePassword = function(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
+
 // Method to generate auth token
-userSchema.methods.generateAuthToken = function() {
-  // JWT payload now only includes user's preferredCompany, role is managed in UserCompany
-  const payload = {
+userSchema.methods.generateAuthToken = function (extraPayload = {}) {
+  const basePayload = {
     id: this._id,
     email: this.email,
-    preferredCompany: this.preferredCompany
   };
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+  // Merge base payload with any extra payload
+  const payload = { ...basePayload, ...extraPayload };
+
+  return jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: '7d'
+  });
 };
 
 module.exports = mongoose.model('User', userSchema);
