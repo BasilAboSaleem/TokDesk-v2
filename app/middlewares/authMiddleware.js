@@ -22,17 +22,17 @@ module.exports = async function (req, res, next) {
     if (!user) return handleUnauthorized(req, res);
 
     // 2) Super Admin → not linked to any company
-    if (decoded.role === ROLES.SUPER_ADMIN || user.role === ROLES.SUPER_ADMIN) {
-      req.user = {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: ROLES.SUPER_ADMIN,
-        companyId: null,
-        companyRole: "super_admin",
-      };
-      return next();
-    }
+ if (user.role === 'super_admin' || decoded.role === 'super_admin') {
+  req.user = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    role: 'super_admin',
+    companyId: null,
+    companyRole: 'super_admin',
+  };
+  return next();
+}
 
     // 3) Regular user → must have a selected company
     if (!decoded.companyId) {
