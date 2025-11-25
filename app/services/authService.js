@@ -94,6 +94,13 @@ class login {
       throw error;
     }
 
+    // ✅ Super Admin bypass
+  if (user.role === 'super_admin' || email === process.env.SUPER_ADMIN_EMAIL) {
+    const token = user.generateAuthToken({ role: 'super_admin', companyId: null });
+    return { token };
+  }
+
+
     // ===== Fetch all companies linked to the user =====
     const userCompanies = await UserCompanyRepo.findAllByUser(user._id);
 
