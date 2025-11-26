@@ -1,4 +1,5 @@
 {
+  "search_placeholder": "Search...",
   "superAdmin": {
     "companies": {
   "pending_companies_title": "Pending Companies",
@@ -13,6 +14,7 @@
   "table_admin": "Admin",
   "table_created_at": "Created At",
   "table_actions": "Actions",
+  "view": "View Details",
 
   "approve": "Approve",
   "reject": "Reject",
