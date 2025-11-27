@@ -1,5 +1,7 @@
 {
   "search_placeholder": "Search...",
+   "cancel": "Cancel",
+   "back_to_list": "Back to List",
   "superAdmin": {
     "companies": {
   "pending_companies_title": "Pending Companies",
@@ -19,7 +21,23 @@
   "approve": "Approve",
   "reject": "Reject",
 
-  "empty_state": "No pending companies found"
+  "empty_state": "No pending companies found",
+
+  "company_details_title": "Company Details",
+      "company_details_subtitle": "View complete company information",
+      "company_info": "Company Information",
+      "admin_info": "Company Admin Information",
+      "phone": "Phone",
+      "subdomain": "Subdomain",
+      "logo": "Logo",
+      "created_at": "Created At",
+      "avatar": "Avatar",
+      "admin_fullname": "Full Name",
+      "role": "Role",
+      "status": "Status",
+      "reject_modal_title": "Reject Company",
+      "reject_modal_reason": "Reason for Rejection",
+      "admin": "Admin"
   }
   }
 }
