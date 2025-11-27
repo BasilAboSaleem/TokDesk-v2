@@ -1,17 +1,17 @@
 <!doctype html>
 <html lang="<%= locale %>" dir="<%= dir %>">
 
-<%- include('../../partials/head.ejs') %>
+<%- include('../../../partials/head.ejs') %>
 
 <body class="">
   <div class="bmd-layout-container bmd-drawer-f-l avam-container animated bmd-drawer-in">
 
     <!-- Header -->
-    <%- include('../../partials/header.ejs') %>
+    <%- include('../../../partials/header.ejs') %>
 
     <!-- Sidebar -->
     <div id="dw-s1" class="bmd-layout-drawer bg-faded">
-      <%- include('../../partials/sidebar.ejs') %>
+      <%- include('../../../partials/sidebar.ejs') %>
     </div>
 
     <!-- Main Content -->
@@ -155,7 +155,7 @@
     </main>
   </div>
 
-  <%- include('../../partials/scripts.ejs') %>
+  <%- include('../../../partials/scripts.ejs') %>
 
   <script>
     document.getElementById('companySearch').addEventListener('input', function() {
