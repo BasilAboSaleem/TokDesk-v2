@@ -49,32 +49,6 @@
           </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="row m-1 mb-4">
-          <div class="col-12 d-flex gap-2 flex-wrap align-items-center">
-
-            <!-- Back Button -->
-            <a href="/superadmin/companies" class="btn btn-secondary px-4 py-2 rounded-pill">
-              <i class="bx bx-arrow-back"></i> <%= t('dashboard:back_to_list') %>
-            </a>
-
-            <!-- Approve -->
-            <form action="/superadmin/companies/<%= company._id %>/approve" method="POST" class="m-0">
-              <button type="submit" class="btn btn-success px-4 py-2 rounded-pill">
-                <i class="bx bx-check"></i> <%= t('dashboard:superAdmin.companies.approve') %>
-              </button>
-            </form>
-
-            <!-- Reject -->
-            <button class="btn btn-danger px-4 py-2 rounded-pill"
-              data-bs-toggle="modal"
-              data-bs-target="#rejectCompanyModal">
-              <i class="bx bx-x"></i> <%= t('dashboard:superAdmin.companies.reject') %>
-            </button>
-
-          </div>
-        </div>
-
         <!-- Company Details Card -->
         <div class="row m-1 mb-4">
           <div class="col-12 p-2">
@@ -147,15 +121,6 @@
                         <div class="col-md-9"><%= admin.email %></div>
                       </div>
 
-                      <% if (admin.profileImage) { %>
-                      <div class="row mb-2">
-                        <div class="col-md-3 fw-bold"><%= t('dashboard:superAdmin.companies.avatar') %>:</div>
-                        <div class="col-md-9">
-                          <img src="<%= admin.profileImage %>" class="rounded-circle border" style="width: 80px; height: 80px; object-fit: cover;">
-                        </div>
-                      </div>
-                      <% } %>
-
                       <div class="row mb-2">
                         <div class="col-md-3 fw-bold"><%= t('dashboard:superAdmin.companies.role') %>:</div>
                         <div class="col-md-9"><%= adminRelations[index].role %></div>
@@ -171,6 +136,15 @@
                         <div class="col-md-9"><%= admin.createdAt.toLocaleDateString(locale) %></div>
                       </div>
 
+                      <% if (admin.profileImage) { %>
+                      <div class="row mb-2">
+                        <div class="col-md-3 fw-bold"><%= t('dashboard:superAdmin.companies.avatar') %>:</div>
+                        <div class="col-md-9">
+                          <img src="<%= admin.profileImage %>" class="rounded-circle border" style="width: 80px; height: 80px; object-fit: cover;">
+                        </div>
+                      </div>
+                      <% } %>
+
                     </div>
                   <% }) %>
                 <% } else { %>
@@ -182,38 +156,88 @@
           </div>
         </div>
 
+       <!-- Action Buttons (Bottom) -->
+<div class="row m-1 mb-4">
+  <div class="col-12 d-flex gap-3 flex-wrap justify-content-end">
+
+    <!-- Back Button -->
+    <a href="/superadmin/companies" class="btn btn-outline-secondary px-5 py-2 rounded-pill shadow-sm hover-scale">
+      <i class="bx bx-arrow-back"></i> <%= t('dashboard:back_to_list') %>
+    </a>
+
+    <!-- Approve -->
+    <form action="/superadmin/companies/<%= company._id %>/approve" method="POST" class="m-0">
+      <button type="submit" class="btn btn-success px-5 py-2 rounded-pill shadow-sm hover-scale">
+        <i class="bx bx-check"></i> <%= t('dashboard:superAdmin.companies.approve') %>
+      </button>
+    </form>
+
+    <!-- Reject -->
+    <button type="button" class="btn btn-danger px-5 py-2 rounded-pill shadow-sm hover-scale"
+      data-bs-toggle="modal"
+      data-bs-target="#rejectCompanyModal">
+      <i class="bx bx-x"></i> <%= t('dashboard:superAdmin.companies.reject') %>
+    </button>
+
+  </div>
+</div>
+
+
+
+
       </div>
     </main>
 
   </div>
 
   <!-- Reject Modal -->
-  <div class="modal fade" id="rejectCompanyModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+ <div class="modal fade" id="rejectCompanyModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-3">
 
-        <form action="/superadmin/companies/<%= company._id %>/reject" method="POST">
+      <form action="/superadmin/companies/<%= company._id %>/reject" method="POST">
 
-          <div class="modal-header">
-            <h5 class="modal-title fw-bold"><%= t('dashboard:superAdmin.companies.reject_modal_title') %></h5>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
+        <div class="modal-header border-0">
+          <h5 class="modal-title fw-bold"><%= t('dashboard:superAdmin.companies.reject_modal_title') %></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
 
-          <div class="modal-body">
-            <label class="form-label fw-bold"><%= t('dashboard:superAdmin.companies.reject_modal_reason') %></label>
-            <textarea name="reason" class="form-control" required rows="4"></textarea>
-          </div>
+        <div class="modal-body">
+          <label class="form-label fw-bold"><%= t('dashboard:superAdmin.companies.reject_modal_reason') %></label>
+          <textarea name="reason" class="form-control shadow-sm" required rows="5" style="resize: none;"></textarea>
+        </div>
 
-          <div class="modal-footer">
-            <button class="btn btn-secondary px-4 py-2" data-bs-dismiss="modal"><%= t('dashboard:cancel') %></button>
-            <button class="btn btn-danger px-4 py-2"><%= t('dashboard:superAdmin.companies.reject') %></button>
-          </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded-pill shadow-sm hover-scale" data-bs-dismiss="modal">
+            <%= t('dashboard:cancel') %>
+          </button>
+          <button type="submit" class="btn btn-danger px-4 py-2 rounded-pill shadow-sm hover-scale">
+            <%= t('dashboard:superAdmin.companies.reject') %>
+          </button>
+        </div>
 
-        </form>
+      </form>
 
-      </div>
     </div>
   </div>
+</div>
+
+
+  <style>
+  .hover-scale {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .hover-scale:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  }
+    .modal-content {
+    border-radius: 1rem;
+  }
+  .modal-body textarea {
+    min-height: 120px;
+  }
+</style>
 
   <%- include('../../../partials/scripts.ejs') %>
 </body>
