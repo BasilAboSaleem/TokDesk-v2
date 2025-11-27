@@ -6,4 +6,6 @@ const authorize = require('../middlewares/authorize');
 
 router.get('/superadmin/companies/pending-approval',authorize([]) , superAdminController.renderPendingCompaniesPage);
 router.get('/superadmin/companies/:id/view',authorize([]) , superAdminController.renderCompanyDetailsPage);
+router.post('/superadmin/companies/:id/approve',authorize([]) , superAdminController.approveCompany);
+
 module.exports = router; 
