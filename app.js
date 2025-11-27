@@ -1,5 +1,5 @@
 // ===========================
-// TokDesk v2 - app.js
+// TokDesk v2 - app.js (with Flash Messages)
 // ===========================
 
 // --------- Imports ----------
@@ -10,6 +10,10 @@ const morgan = require("morgan");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const path = require("path");
+
+// --------- Flash & Session ----------
+const session = require("express-session");
+const flash = require("connect-flash");
 
 // --------- Config / DB ----------
 const connectDB = require("./config/db"); // MongoDB
@@ -67,13 +71,27 @@ app.use(
   })
 );
 
+// --------- Session & Flash ----------
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'secret',
+  resave: false,
+  saveUninitialized: true,
+}));
+
+app.use(flash());
+
+// Global variables for flash messages
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  next();
+});
+
 // --------- Custom Middleware for Direct Messages & Online Users ----------
 app.use(async (req, res, next) => {
   try {
-    // fake data for demonstration; replace with real DB calls
-    res.locals.directMessages = []; // or await getDirectMessagesForUser(req.user.id)
-    res.locals.onlineUsers = []; // or await getOnlineUsers()
-
+    res.locals.directMessages = [];
+    res.locals.onlineUsers = [];
     next();
   } catch (err) {
     console.error(err);
@@ -83,30 +101,19 @@ app.use(async (req, res, next) => {
   }
 });
 
-
 // --------- Routes ----------
-
 const landingRouter = require("./app/routes/landing");
 const authRoutes = require("./app/routes/authRoutes");
 const dashboardRoutes = require("./app/routes/dashboardRoutes");
 const superAdminRoutes = require("./app/routes/superAdminRoutes");
-/*
-const userRoutes = require("./app/routes/userRoutes");
-const companyRoutes = require("./app/routes/companyRoutes");
-const departmentRoutes = require("./app/routes/departmentRoutes");
-const invitationRoutes = require("./app/routes/invitationRoutes");
-const announcementRoutes = require("./app/routes/announcementRoutes");
-*/
+
 // Public routes
 app.use("/", landingRouter);
 app.use("/auth", authRoutes);
 
 // --------- Auth & Global User Middleware ----------
-
-// 🔹 Authentication: verify token & populate req.user
 app.use(authMiddleware);
 
-// 🔹 Global User Injection: make user available in all views
 const ROLES = require("./app/constants/roles");
 app.use((req, res, next) => {
   if (req.user) {
@@ -121,24 +128,14 @@ app.use((req, res, next) => {
   } else {
     res.locals.user = null;
   }
-
-  res.locals.ROLES = ROLES; // ✅ تمريره لجميع الـ EJS
+  res.locals.ROLES = ROLES; 
   next();
 });
 
-
-
-
-// Protected routes (authMiddleware + authorize can be used inside these routes)
+// Protected routes
 app.use("/dashboard", dashboardRoutes);
 app.use("/", superAdminRoutes);
-/*
-app.use("/api/users", userRoutes);
-app.use("/api/companies", companyRoutes);
-app.use("/api/departments", departmentRoutes);
-app.use("/api/invitations", invitationRoutes);
-app.use("/api/announcements", announcementRoutes);
-*/
+
 // --------- Health Check ----------
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date() });
