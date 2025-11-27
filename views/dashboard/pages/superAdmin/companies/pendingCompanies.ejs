@@ -54,6 +54,29 @@
             </div>
           </div>
         </div>
+        <!-- Flash Messages -->
+<% if (typeof success_msg !== 'undefined') { %>
+  <div class="row m-1">
+    <div class="col-12">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%= success_msg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+<% if (typeof error_msg !== 'undefined') { %>
+  <div class="row m-1">
+    <div class="col-12">
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error_msg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+<% } %>
+
 
         <!-- Summary Card -->
 <div class="row m-1 mb-4">
@@ -80,10 +103,6 @@
     box-shadow: 0 6px 15px rgba(0,0,0,0.08);
   }
 </style>
-
-
-
-
         <!-- Companies Table with Search -->
         <div class="row m-1">
           <div class="col-12 p-2">
