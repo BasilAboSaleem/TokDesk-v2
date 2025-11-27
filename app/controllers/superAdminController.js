@@ -43,3 +43,17 @@ exports.approveCompany = async (req, res) => {
         res.status(500).send('Server Error');
     }
 }
+
+exports.rejectCompany = async (req, res) => {
+    const companyId = req.params.id;
+    const { reason } = req.body;
+    try {
+        await CompanyService.rejectCompany(companyId, reason);
+        const successMessage = req.t('dashboard:superAdmin.companies.flash_company_rejected');
+        req.flash('success_msg', successMessage);
+        res.redirect('/superadmin/companies/pending-approval');
+    } catch (error) {
+        console.error('Reject Company Error:', error);
+        res.status(500).send('Server Error');
+    }
+}
