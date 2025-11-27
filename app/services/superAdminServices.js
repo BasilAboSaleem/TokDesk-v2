@@ -35,15 +35,15 @@ class CompanyService {
         return company;
     }
 
-    /*async rejectCompany(companyId, reason) {
-        const company = await Company.findById(companyId);
+    async rejectCompany(companyId, reason) {
+        const company = await CompanyRepo.findById(companyId);
         if (!company) throw new Error('Company not found');
 
         company.status = 'rejected';
         company.rejectReason = reason;
         await company.save();
         return company;
-    }*/
+    }
 }
 
 module.exports = new CompanyService();
