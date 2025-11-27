@@ -37,7 +37,9 @@
       "status": "Status",
       "reject_modal_title": "Reject Company",
       "reject_modal_reason": "Reason for Rejection",
-      "admin": "Admin"
+      "admin": "Admin",
+      "flash_company_approved": "Company approved successfully",
+      "flash_company_rejected": "Company rejected successfully"
   }
   }
 }
