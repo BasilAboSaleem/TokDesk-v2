@@ -26,8 +26,8 @@ class CompanyService {
     };
 }
 
-    /*async approveCompany(companyId) {
-        const company = await Company.findById(companyId);
+    async approveCompany(companyId) {
+        const company = await CompanyRepo.findById(companyId);
         if (!company) throw new Error('Company not found');
 
         company.status = 'approved';
@@ -35,7 +35,7 @@ class CompanyService {
         return company;
     }
 
-    async rejectCompany(companyId, reason) {
+    /*async rejectCompany(companyId, reason) {
         const company = await Company.findById(companyId);
         if (!company) throw new Error('Company not found');
 
