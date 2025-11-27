@@ -22,6 +22,11 @@ class UserCompanyRepository {
     return await UserCompany.find({ company: companyId }).populate('user');
   }
 
+  // find admins of a company
+  async findAdminsByCompany(companyId) {
+    return await UserCompany.find({ company: companyId, role: 'admin' }).populate('user');
+  }
+
   // Update a UserCompany record
   async update(id, data) {
     return await UserCompany.findByIdAndUpdate(id, data, { new: true });
