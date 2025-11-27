@@ -46,20 +46,11 @@ const companySchema = new mongoose.Schema({
     default: 'en'
   },
 
-  defaultTheme: {
+
+  status: {
     type: String,
-    enum: ['light', 'dark'],
-    default: 'light'
-  },
-
-  isActive: {
-    type: Boolean,
-    default: false
-  },
-
-  isRejected: {
-    type: Boolean,
-    default: false
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending'
   },
 
   rejectionReason: {

@@ -1,0 +1,32 @@
+<section class="hero-section tw-relative tw-flex tw-min-h-[100vh] tw-w-full tw-max-w-[100vw] tw-flex-col tw-overflow-hidden max-md:tw-mt-[50px]" id="hero-section">
+    <div class="tw-flex tw-h-full tw-min-h-[100vh] tw-w-full tw-flex-col tw-place-content-center tw-gap-6 tw-p-[5%] max-xl:tw-place-items-center max-lg:tw-p-4">
+
+        <div class="tw-flex tw-flex-col tw-place-content-center tw-items-center">
+            <div class="reveal-up gradient-text tw-text-center tw-text-6xl tw-font-semibold tw-uppercase tw-leading-[80px] max-lg:tw-text-4xl max-md:tw-leading-snug">
+                <span><%= t('landing:hero.title1') %></span><br />
+                <span><%= t('landing:hero.title2') %></span>
+            </div>
+
+            <div class="reveal-up tw-mt-6 tw-max-w-[450px] tw-p-2 tw-text-center tw-text-gray-300 max-lg:tw-max-w-full">
+                <%= t('landing:hero.subtitle') %>
+            </div>
+
+            <div  class="reveal-up tw-mt-8 tw-flex tw-flex-wrap tw-place-items-center tw-gap-4">
+                <a class="btn tw-bg-[#7e22ce85] tw-shadow-lg tw-shadow-primary tw-transition-transform tw-duration-[0.3s] hover:tw-scale-x-[1.03]" href="/auth/register">
+                    <%= t('landing:hero.registerCompany') %>
+                </a>
+                <a class="btn tw-flex tw-gap-2 !tw-bg-black !tw-text-white tw-transition-colors tw-duration-[0.3s] hover:!tw-bg-white hover:!tw-text-black" href="/login">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span><%= t('landing:hero.login') %></span>
+                </a>
+            </div>
+        </div>
+
+        <div class="reveal-up tw-relative tw-mt-8 tw-flex tw-w-full tw-place-content-center tw-place-items-center" id="dashboard-container">
+            <div class="tw-relative tw-max-w-[80%] tw-overflow-hidden tw-rounded-xl tw-bg-transparent max-md:tw-max-w-full" id="dashboard">
+                <img src="/landing/assets/images/home/dashboard.png" alt="dashboard" class="tw-h-full tw-w-full tw-object-cover tw-opacity-90 max-lg:tw-object-contain" />
+            </div>
+            <div class="hero-img-bg-grad tw-absolute tw-left-[20%] tw-top-5 tw-h-[200px] tw-w-[200px]"></div>
+        </div>
+    </div>
+</section>

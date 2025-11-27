@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const ROLES = require('../constants/roles');
+const jwt = require('jsonwebtoken'); 
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -22,18 +22,14 @@ const userSchema = new mongoose.Schema({
     minlength: 6
   },
 
-  role: {
-    type: String,
-    enum: Object.values(ROLES),
-    default: ROLES.EMPLOYEE
+  // Stores the user's last selected company
+  preferredCompany: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company',
+    default: null
   },
 
-  company: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: 'Company',
-  required: true
-},
-
+  // Optional department field; can be linked via UserCompany if needed
   department: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Department',
@@ -44,12 +40,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['en', 'ar'],
     default: 'en'
-  },
-
-  theme: {
-    type: String,
-    enum: ['light', 'dark'],
-    default: 'light'
   },
 
   status: {
@@ -74,8 +64,8 @@ const userSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-// Unique index for email and company
-userSchema.index({ email: 1, company: 1 }, { unique: true });
+// Unique index for email only (company removed, now handled via UserCompany)
+userSchema.index({ email: 1 }, { unique: true });
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
@@ -87,6 +77,22 @@ userSchema.pre('save', async function(next) {
 // Method to compare password
 userSchema.methods.comparePassword = function(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
+};
+
+
+// Method to generate auth token
+userSchema.methods.generateAuthToken = function (extraPayload = {}) {
+  const basePayload = {
+    id: this._id,
+    email: this.email,
+  };
+
+  // Merge base payload with any extra payload
+  const payload = { ...basePayload, ...extraPayload };
+
+  return jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: '7d'
+  });
 };
 
 module.exports = mongoose.model('User', userSchema);

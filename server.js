@@ -3,13 +3,14 @@
 // ===========================
 
 // --------- Imports ----------
-require('dotenv').config();
+require("dotenv").config();
 const http = require("http");
 const { Server } = require("socket.io");
-const { app } = require("./app");
+const app = require("./app");
 
 // --------- Environment ----------
 const PORT = process.env.PORT || 3000;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
 // --------- Create HTTP Server ----------
 const server = http.createServer(app);
@@ -27,24 +28,20 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("⚡ New client connected:", socket.id);
 
-  // Example: join a room
   socket.on("joinRoom", (room) => {
     socket.join(room);
     console.log(`Socket ${socket.id} joined room ${room}`);
   });
 
-  // Example: leave a room
   socket.on("leaveRoom", (room) => {
     socket.leave(room);
     console.log(`Socket ${socket.id} left room ${room}`);
   });
 
-  // Example: chat message
   socket.on("chatMessage", ({ room, message, sender }) => {
     io.to(room).emit("chatMessage", { message, sender, timestamp: new Date() });
   });
 
-  // Disconnect event
   socket.on("disconnect", () => {
     console.log("⚡ Client disconnected:", socket.id);
   });
@@ -52,8 +49,9 @@ io.on("connection", (socket) => {
 
 // --------- Start Server ----------
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🚀 Server running at: ${BASE_URL}`);
 });
 
 // --------- Export Server & io (optional) ----------
 module.exports = { server, io };
+ 

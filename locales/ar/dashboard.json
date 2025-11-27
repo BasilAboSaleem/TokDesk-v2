@@ -1,0 +1,18 @@
+{
+  "pending_companies_title": "الشركات المعلّقة",
+  "pending_companies_count": "إجمالي الشركات المعلّقة",
+  "breadcrumb_dashboard": "لوحة التحكم",
+  "breadcrumb_companies": "الشركات",
+
+  "table_logo": "الشعار",
+  "table_company_name": "اسم الشركة",
+  "table_email": "البريد الإلكتروني",
+  "table_admin": "الأدمن",
+  "table_created_at": "تاريخ التسجيل",
+  "table_actions": "الإجراءات",
+
+  "approve": "قبول",
+  "reject": "رفض",
+
+  "empty_state": "لا توجد شركات معلّقة حاليًا"
+}

@@ -8,30 +8,33 @@ const ROLES = require('../constants/roles');
 function authorize(requiredPermissions = []) {
   return (req, res, next) => {
     try {
-      // جلب المستخدم من الطلب (يفترض أن يتم تعيينه بواسطة middleware المصادقة)
-      const user = req.user;
+      const userPayload = req.user; // from JWT
 
-      if (!user) {
+      if (!userPayload) {
         return res.status(401).json({ message: 'Unauthorized: user not authenticated' });
       }
 
-      const userRole = user.role;
+      const userRole = userPayload.role; 
+      const companyId = userPayload.companyId;
 
-      // السوبر أدمن يتخطى كل checks تلقائياً
+      // super admin has all permissions
       if (userRole === ROLES.SUPER_ADMIN) {
         return next();
       }
 
-      const rolePermissions = permissions[userRole] || [];
+      // check for company-related permissions
+      if (!companyId) {
+        return res.status(400).json({ message: 'Company context missing' });
+      }
 
-      // التحقق من وجود كل الصلاحيات المطلوبة لدى المستخدم
+      const rolePermissions = permissions[userRole] || [];
       const hasPermissions = requiredPermissions.every(p => rolePermissions.includes(p));
 
       if (!hasPermissions) {
         return res.status(403).json({ message: 'Forbidden: insufficient permissions' });
       }
 
-      next(); // المستخدم لديه كل الصلاحيات المطلوبة
+      next();
     } catch (err) {
       console.error('Authorization middleware error:', err);
       res.status(500).json({ message: 'Internal server error' });

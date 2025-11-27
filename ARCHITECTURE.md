@@ -8,7 +8,8 @@ This is the recommended folder/file structure for TokDesk v2:
 
 ```
 TokDesk-v2/
-├── app/                     
+├── app/
+|   ├── constants/           # Roles&Permissions                
 │   ├── controllers/         # Request handlers
 │   ├── services/            # Business logic
 │   ├── repositories/        # DB operations abstraction
