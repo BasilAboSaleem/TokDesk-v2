@@ -54,29 +54,18 @@
             </div>
           </div>
         </div>
-        <!-- Flash Messages -->
-<% if (typeof success_msg !== 'undefined') { %>
-  <div class="row m-1">
-    <div class="col-12">
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <%= success_msg %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    </div>
+         <!-- Flash Messages -->
+<% if (typeof success_msg === 'string' && success_msg.trim() !== '') { %>
+  <div class="alert alert-success alert-dismissible fade show mx-2" role="alert" id="flashMessage">
+    <%= success_msg %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } else if (typeof error_msg === 'string' && error_msg.trim() !== '') { %>
+  <div class="alert alert-danger alert-dismissible fade show mx-2" role="alert" id="flashMessage">
+    <%= error_msg %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
   </div>
 <% } %>
-
-<% if (typeof error_msg !== 'undefined') { %>
-  <div class="row m-1">
-    <div class="col-12">
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <%= error_msg %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    </div>
-  </div>
-<% } %>
-
 
         <!-- Summary Card -->
 <div class="row m-1 mb-4">
@@ -175,6 +164,20 @@
   </div>
 
   <%- include('../../../partials/scripts.ejs') %>
+    <!-- Auto-dismiss Flash Messages -->
+<script>
+  setTimeout(() => {
+    const flashMessage = document.getElementById('flashMessage');
+    if (flashMessage) {
+      flashMessage.style.transition = "opacity 0.5s ease, max-height 0.5s ease, padding 0.5s ease, margin 0.5s ease";
+      flashMessage.style.opacity = 0;
+      flashMessage.style.maxHeight = 0;
+      flashMessage.style.padding = 0;
+      flashMessage.style.margin = 0;
+      setTimeout(() => flashMessage.remove(), 500);
+    }
+  }, 15000);
+</script>
 
   <script>
     document.getElementById('companySearch').addEventListener('input', function() {
