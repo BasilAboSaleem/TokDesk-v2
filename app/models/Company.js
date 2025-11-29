@@ -57,6 +57,10 @@ const companySchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  blocked: {
+  type: Boolean,
+  default: false
+}, 
 
   isDeleted: {
     type: Boolean,
