@@ -57,3 +57,16 @@ exports.rejectCompany = async (req, res) => {
         res.status(500).send('Server Error');
     }
 }
+
+exports.listAllCompanies = async (req, res) => {
+    try {
+        const companies = await CompanyService.getAllCompanies();
+        res.render('dashboard/pages/superAdmin/companies/allCompanies', {
+            title: 'All Companies',
+            companies
+        });
+    } catch (error) {
+        console.error('List All Companies Error:', error);
+        res.status(500).send('Server Error');
+    }
+}
