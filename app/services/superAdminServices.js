@@ -44,6 +44,11 @@ class CompanyService {
         await company.save();
         return company;
     }
+
+    async getAllCompanies() {
+        const companies = await CompanyRepo.findAll();
+        return companies;
+    }
 }
 
 module.exports = new CompanyService();
