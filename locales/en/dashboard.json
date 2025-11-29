@@ -39,7 +39,10 @@
       "reject_modal_reason": "Reason for Rejection",
       "admin": "Admin",
       "flash_company_approved": "Company approved successfully",
-      "flash_company_rejected": "Company rejected successfully"
+      "flash_company_rejected": "Company rejected successfully",
+      "all_companies_title": "All Companies",
+      "all_companies_subtitle": "List of all registered companies",
+      "total_companies_count": "Total Companies"
   }
   }
 }
