@@ -8,4 +8,5 @@ router.get('/superadmin/companies/pending-approval',authorize([]) , superAdminCo
 router.get('/superadmin/companies/:id/view',authorize([]) , superAdminController.renderCompanyDetailsPage);
 router.post('/superadmin/companies/:id/approve',authorize([]) , superAdminController.approveCompany);
 router.post('/superadmin/companies/:id/reject',authorize([]) , superAdminController.rejectCompany);
+router.get('/superadmin/companies',authorize([]) , superAdminController.listAllCompanies);
 module.exports = router; 
