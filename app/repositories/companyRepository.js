@@ -15,6 +15,10 @@ class CompanyRepository {
   async findBySubdomain(subdomain) {
     return Company.findOne({ subdomain });
   }
+
+  async findAll() {
+    return Company.find();
+  }
 }
 
 module.exports = new CompanyRepository();
