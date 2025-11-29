@@ -18,7 +18,7 @@
     <main class="bmd-layout-content">
       <div class="container-fluid my-4">
 
-        <!-- Title + Breadcrumb -->
+        <!-- Page Title & Breadcrumb -->
         <div class="row m-1 pb-4 mb-3">
           <div class="col-12 p-2">
             <div class="page-header breadcrumb-header">
@@ -35,6 +35,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="col-lg-4">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
@@ -45,7 +46,7 @@
                         <%= t('dashboard:superAdmin.companies.breadcrumb_companies') %>
                       </a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">
+                    <li class="breadcrumb-item active">
                       <%= t('dashboard:superAdmin.companies.all_companies_title') %>
                     </li>
                   </ol>
@@ -56,109 +57,95 @@
         </div>
 
         <!-- Flash Messages -->
-        <% if (typeof success_msg !== 'undefined') { %>
-          <div class="row m-1">
-            <div class="col-12">
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <%= success_msg %>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            </div>
-          </div>
+        <% if (success_msg) { %>
+        <div class="alert alert-success alert-dismissible fade show mx-2" role="alert">
+          <%= success_msg %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
         <% } %>
 
-        <% if (typeof error_msg !== 'undefined') { %>
-          <div class="row m-1">
-            <div class="col-12">
-              <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <%= error_msg %>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            </div>
-          </div>
+        <% if (error_msg) { %>
+        <div class="alert alert-danger alert-dismissible fade show mx-2" role="alert">
+          <%= error_msg %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
         <% } %>
 
-        <!-- Summary Card -->
+        <!-- Summary Cards -->
         <div class="row m-1 mb-4">
           <div class="col-md-4 col-sm-6 p-2">
-            <div class="card h-100 shadow-sm border-0 text-center p-4" style="transition: transform 0.2s, box-shadow 0.2s; cursor: default;">
-              <h2 class="fw-bold mb-2" style="font-size:2.5rem; color:#0d6efd;">
+            <div class="card summary-card h-100 shadow-sm p-4 text-center">
+              <h2 class="fw-bold mb-2 text-primary" style="font-size: 2.7rem;">
                 <%= companies.length %>
               </h2>
-              <p class="mb-0 text-secondary fs-5" style="font-weight:500;">
+              <p class="text-secondary fs-5 fw-semibold">
                 <%= t('dashboard:superAdmin.companies.total_companies_count') %>
               </p>
             </div>
           </div>
         </div>
 
-        <style>
-          .card {
-            border-radius: 0.75rem;
-          }
-          .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-          }
-        </style>
-
-        <!-- Companies Table with Search -->
+        <!-- Companies Table -->
         <div class="row m-1">
           <div class="col-12 p-2">
-            <div class="card shade h-100 shadow-sm border-0">
-              <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card shade shadow-sm border-0">
+
+              <!-- Header -->
+              <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                
                 <h5 class="mb-0 d-flex align-items-center gap-2">
-                  <i class="bx bx-building-house"></i> <%= t('dashboard:superAdmin.companies.all_companies_title') %>
+                  <i class="bx bx-building-house"></i>
+                  <%= t('dashboard:superAdmin.companies.all_companies_title') %>
                 </h5>
-                <!-- Search Bar -->
-                <div class="position-relative" style="width: 50%;">
+
+                <!-- Responsive Search -->
+                <div class="search-wrapper position-relative w-50 w-md-50">
                   <input 
                     id="allCompanySearch" 
-                    type="text" 
-                    class="form-control form-control-sm rounded-pill ps-3 pe-3" 
-                    placeholder="<%= t('dashboard:search_placeholder') %>" 
-                    style="height:38px; font-size:0.95rem;"
+                    type="text"
+                    class="form-control form-control-sm rounded-pill ps-4"
+                    placeholder="<%= t('dashboard:search_placeholder') %>"
                   />
-                  <span class="position-absolute top-50 start-0 translate-middle-y ps-2 fs-5" style="pointer-events:none;">
-                    <i class="bx bx-search"></i>
-                  </span>
+                  <i class="bx bx-search position-absolute top-50 start-0 translate-middle-y ps-2 text-muted"></i>
                 </div>
               </div>
 
+              <!-- Table -->
               <div class="table-responsive text-nowrap">
-                <table class="table table-hover table-striped" id="allCompaniesTable">
+                <table class="table table-hover table-striped align-middle" id="allCompaniesTable">
                   <thead>
                     <tr>
-                      <th><i class="bx bx-building-house"></i> <%= t('dashboard:superAdmin.companies.table_company_name') %></th>
-                      <th><i class="bx bx-envelope"></i> <%= t('dashboard:superAdmin.companies.table_email') %></th>
-                      <th><i class="bx bx-calendar"></i> <%= t('dashboard:superAdmin.companies.table_created_at') %></th>
-                      <th class="text-center"><i class="bx bx-cog"></i> <%= t('dashboard:superAdmin.companies.table_actions') %></th>
+                      <th><i class="bx bx-building-house me-1"></i><%= t('dashboard:superAdmin.companies.table_company_name') %></th>
+                      <th><i class="bx bx-envelope me-1"></i><%= t('dashboard:superAdmin.companies.table_email') %></th>
+                      <th><i class="bx bx-calendar me-1"></i><%= t('dashboard:superAdmin.companies.table_created_at') %></th>
+                      <th class="text-center"><i class="bx bx-cog"><%= t('dashboard:superAdmin.companies.table_actions') %> </i></th>
                     </tr>
                   </thead>
+
                   <tbody>
                     <% if (companies.length === 0) { %>
-                      <tr>
-                        <td colspan="4" class="text-center py-5">
-                          <div class="text-muted fs-5">
-                            <i class="bx bx-time fs-1 d-block mb-2"></i>
-                            <%= t('dashboard:superAdmin.companies.empty_state') %>
-                          </div>
-                        </td>
-                      </tr>
-                    <% } else { %>
-                      <% companies.forEach(company => { %>
-                        <tr>
-                          <td><i class="bx bx-building-house me-1"></i> <%= company.name %></td>
-                          <td><i class="bx bx-envelope me-1"></i> <%= company.email %></td>
-                          <td><i class="bx bx-calendar me-1"></i> <%= company.createdAt ? company.createdAt.toLocaleDateString(locale) : '' %></td>
-                          <td class="text-center d-flex justify-content-center">
-                            <a href="/superadmin/companies/<%= company._id %>/view" class="btn btn-primary btn-sm rounded-pill px-4 d-flex align-items-center">
-                              <i class="bx bx-show me-1"></i> <%= t('dashboard:superAdmin.companies.view') %>
-                            </a>
-                          </td>
-                        </tr>
-                      <% }) %>
-                    <% } %>
+                    <tr>
+                      <td colspan="4" class="text-center py-5">
+                        <div class="text-muted fs-5">
+                          <i class="bx bx-time fs-1 d-block mb-2"></i>
+                          <%= t('dashboard:superAdmin.companies.empty_state') %>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <% } else { companies.forEach(company => { %>
+                    <tr>
+                      <td><i class="bx bx-buildings me-1"></i> <%= company.name %></td>
+                      <td><i class="bx bx-envelope me-1"></i> <%= company.email %></td>
+                      <td><%= company.createdAt ? company.createdAt.toLocaleDateString(locale) : '' %></td>
+
+                                   <td class="text-center d-flex justify-content-center">
+  <a href="/superadmin/companies/<%= company._id %>/view" class="btn btn-primary btn-sm rounded-pill px-4 d-flex align-items-center">
+    <i class="bx bx-show me-1"></i> <%= t('dashboard:superAdmin.companies.view') %>
+  </a>
+</td>
+                    </tr>
+                    <% }) } %>
                   </tbody>
                 </table>
               </div>
@@ -173,40 +160,26 @@
 
   <%- include('../../../partials/scripts.ejs') %>
 
+  <!-- Search Filter -->
   <script>
-    document.getElementById('allCompanySearch').addEventListener('input', function() {
-      const filter = this.value.toLowerCase();
-      const rows = document.querySelectorAll('#allCompaniesTable tbody tr');
+    document.getElementById("allCompanySearch").addEventListener("input", function () {
+      const filter = this.value.toLowerCase().trim();
+      const rows = document.querySelectorAll("#allCompaniesTable tbody tr");
+
       rows.forEach(row => {
-        const name = row.cells[0]?.textContent.toLowerCase() || '';
-        const email = row.cells[1]?.textContent.toLowerCase() || '';
-        const createdAt = row.cells[2]?.textContent.toLowerCase() || '';
-        if (name.includes(filter) || email.includes(filter) || createdAt.includes(filter)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(filter) ? "" : "none";
       });
     });
   </script>
 
   <style>
-    #allCompanySearch:focus {
-      box-shadow: 0 0 10px rgba(0,123,255,0.2);
-      outline: none;
-    }
-    .table th i {
-      vertical-align: middle;
-      margin-right: 5px;
-    }
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .btn-primary:hover {
-      background-color: #0b5ed7;
-      border-color: #0b5ed7;
+    .summary-card { border-radius: 0.8rem; transition: .2s; }
+    .summary-card:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+
+    .search-wrapper input { height: 38px; }
+    @media (max-width: 768px) {
+      .search-wrapper { width: 100% !important; }
     }
   </style>
 
