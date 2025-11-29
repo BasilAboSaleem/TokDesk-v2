@@ -83,6 +83,11 @@
                   <div class="col-md-9"><%= company.createdAt.toLocaleDateString(locale) %></div>
                 </div>
 
+                <div class="row mb-3">
+                  <div class="col-md-3 fw-bold"><%= t('dashboard:superAdmin.companies.status') %>:</div>
+                  <div class="col-md-9 text-capitalize"><%= company.status %></div>
+                </div>
+
                 <% if (company.logo) { %>
                 <div class="row mb-3">
                   <div class="col-md-3 fw-bold"><%= t('dashboard:superAdmin.companies.logo') %>:</div>
@@ -156,34 +161,54 @@
           </div>
         </div>
 
-       <!-- Action Buttons (Bottom) -->
-<div class="row m-1 mb-4">
-  <div class="col-12 d-flex gap-3 flex-wrap justify-content-end">
+        <!-- Action Buttons -->
+        <div class="row m-1 mb-4">
+          <div class="col-12 d-flex gap-3 flex-wrap justify-content-end">
 
-    <!-- Back Button -->
-    <a href="/superadmin/companies" class="btn btn-outline-secondary px-5 py-2 rounded-pill shadow-sm hover-scale">
-      <i class="bx bx-arrow-back"></i> <%= t('dashboard:back_to_list') %>
-    </a>
+            <!-- Back Button -->
+            <a href="/superadmin/companies" class="btn btn-outline-secondary px-5 py-2 rounded-pill shadow-sm hover-scale">
+              <i class="bx bx-arrow-back"></i> <%= t('dashboard:back_to_list') %>
+            </a>
 
-    <!-- Approve -->
-    <form action="/superadmin/companies/<%= company._id %>/approve" method="POST" class="m-0">
-      <button type="submit" class="btn btn-success px-5 py-2 rounded-pill shadow-sm hover-scale">
-        <i class="bx bx-check"></i> <%= t('dashboard:superAdmin.companies.approve') %>
-      </button>
-    </form>
+            <!-- Soft Delete Button (Always visible) -->
+            <form action="/superadmin/companies/<%= company._id %>/delete" method="POST" class="m-0">
+              <button type="submit" class="btn btn-danger px-5 py-2 rounded-pill shadow-sm hover-scale">
+                <i class="bx bx-trash"></i> <%= t('dashboard:superAdmin.companies.soft_delete') %>
+              </button>
+            </form>
 
-    <!-- Reject -->
-    <button type="button" class="btn btn-danger px-5 py-2 rounded-pill shadow-sm hover-scale"
-      data-bs-toggle="modal"
-      data-bs-target="#rejectCompanyModal">
-      <i class="bx bx-x"></i> <%= t('dashboard:superAdmin.companies.reject') %>
-    </button>
+            <% if (company.status === 'pending') { %>
+              <!-- Approve Button -->
+              <form action="/superadmin/companies/<%= company._id %>/approve" method="POST" class="m-0">
+                <button type="submit" class="btn btn-success px-5 py-2 rounded-pill shadow-sm hover-scale">
+                  <i class="bx bx-check"></i> <%= t('dashboard:superAdmin.companies.approve') %>
+                </button>
+              </form>
 
-  </div>
-</div>
+              <!-- Reject Button -->
+              <button type="button" class="btn btn-danger px-5 py-2 rounded-pill shadow-sm hover-scale"
+                data-bs-toggle="modal"
+                data-bs-target="#rejectCompanyModal">
+                <i class="bx bx-x"></i> <%= t('dashboard:superAdmin.companies.reject') %>
+              </button>
+            <% } else if (company.status === 'approved' && !company.blocked) { %>
+              <!-- Block Button -->
+              <form action="/superadmin/companies/<%= company._id %>/block" method="POST" class="m-0">
+                <button type="submit" class="btn btn-warning px-5 py-2 rounded-pill shadow-sm hover-scale">
+                  <i class="bx bx-lock"></i> <%= t('dashboard:superAdmin.companies.block') %>
+                </button>
+              </form>
+            <% } else if (company.blocked) { %>
+              <!-- Unblock Button -->
+              <form action="/superadmin/companies/<%= company._id %>/unblock" method="POST" class="m-0">
+                <button type="submit" class="btn btn-success px-5 py-2 rounded-pill shadow-sm hover-scale">
+                  <i class="bx bx-unlock"></i> <%= t('dashboard:superAdmin.companies.unblock') %>
+                </button>
+              </form>
+            <% } %>
 
-
-
+          </div>
+        </div>
 
       </div>
     </main>
@@ -221,7 +246,6 @@
     </div>
   </div>
 </div>
-
 
   <style>
   .hover-scale {
