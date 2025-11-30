@@ -1,8 +1,0 @@
-{
-  "superAdmin": {
-    "companies": {
-      "block": "superAdmin.companies.block",
-      "soft_delete": "superAdmin.companies.soft_delete"
-    }
-  }
-}
