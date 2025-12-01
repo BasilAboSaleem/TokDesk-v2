@@ -2,7 +2,7 @@
 // TokDesk v2 - app.js (with Flash Messages)
 // ===========================
 
-// ---------- Imports ----------
+// ---------- Imports -----------
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const methodOverride = require("method-override"); 
