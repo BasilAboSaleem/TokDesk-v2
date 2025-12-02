@@ -52,6 +52,6 @@ server.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running at: ${BASE_URL}`);
 });
 
-// --------- Export Server & io (optional) ----------
+// --------- Export Server & io (optional) -----------
 module.exports = { server, io };
  
